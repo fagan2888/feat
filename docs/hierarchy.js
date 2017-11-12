@@ -1,16 +1,16 @@
 var hierarchy =
 [
-    [ "FT::comparator_obj", "df/dae/structFT_1_1comparator__obj.html", null ],
+    [ "FT::Pareto::comparator_obj", "d5/d3d/structFT_1_1Pareto_1_1comparator__obj.html", null ],
     [ "FT::Evaluation", "df/db3/classFT_1_1Evaluation.html", null ],
     [ "FT::Fewtwo", "dc/d9e/classFT_1_1Fewtwo.html", null ],
     [ "FT::Individual", "df/d8a/structFT_1_1Individual.html", null ],
+    [ "InputParser", "de/d16/classInputParser.html", null ],
     [ "FT::ML", "df/dfa/classFT_1_1ML.html", null ],
     [ "FT::Node", "d3/daf/classFT_1_1Node.html", [
       [ "FT::NodeAdd", "dd/dec/classFT_1_1NodeAdd.html", null ],
       [ "FT::NodeAnd", "dc/da3/classFT_1_1NodeAnd.html", null ],
       [ "FT::NodeConstant", "da/d77/classFT_1_1NodeConstant.html", null ],
       [ "FT::NodeCos", "d6/da2/classFT_1_1NodeCos.html", null ],
-      [ "FT::NodeCosine", "db/d3b/classFT_1_1NodeCosine.html", null ],
       [ "FT::NodeCube", "d1/d36/classFT_1_1NodeCube.html", null ],
       [ "FT::NodeDivide", "d7/d5c/classFT_1_1NodeDivide.html", null ],
       [ "FT::NodeEqual", "d9/d69/classFT_1_1NodeEqual.html", null ],
@@ -28,7 +28,6 @@ var hierarchy =
       [ "FT::NodeOr", "d7/d13/classFT_1_1NodeOr.html", null ],
       [ "FT::NodeRoot", "db/da6/classFT_1_1NodeRoot.html", null ],
       [ "FT::NodeSin", "da/d1c/classFT_1_1NodeSin.html", null ],
-      [ "FT::NodeSine", "d6/d0e/classFT_1_1NodeSine.html", null ],
       [ "FT::NodeSqrt", "d7/d49/classFT_1_1NodeSqrt.html", null ],
       [ "FT::NodeSquare", "d4/da1/classFT_1_1NodeSquare.html", null ],
       [ "FT::NodeSubtract", "d1/d46/classFT_1_1NodeSubtract.html", null ],
@@ -37,11 +36,14 @@ var hierarchy =
     [ "FT::Parameters", "de/d2c/structFT_1_1Parameters.html", null ],
     [ "FT::Population", "d9/ddc/structFT_1_1Population.html", null ],
     [ "FT::Rnd", "dd/d2d/classFT_1_1Rnd.html", null ],
+    [ "FT::Population::SameFitComplexity", "dd/d4c/structFT_1_1Population_1_1SameFitComplexity.html", null ],
     [ "FT::Selection", "de/d87/structFT_1_1Selection.html", null ],
     [ "FT::SelectionOperator", "d2/d3a/structFT_1_1SelectionOperator.html", [
       [ "FT::Lexicase", "d8/d78/structFT_1_1Lexicase.html", null ],
       [ "FT::Pareto", "de/d2e/structFT_1_1Pareto.html", null ]
     ] ],
-    [ "FT::sort_n", "df/d63/structFT_1_1sort__n.html", null ],
+    [ "FT::Pareto::sort_n", "d2/dbc/structFT_1_1Pareto_1_1sort__n.html", null ],
+    [ "FT::Population::SortComplexity", "db/df6/structFT_1_1Population_1_1SortComplexity.html", null ],
+    [ "FT::Timer", "d3/d4e/classFT_1_1Timer.html", null ],
     [ "FT::Variation", "d3/d01/classFT_1_1Variation.html", null ]
 ];

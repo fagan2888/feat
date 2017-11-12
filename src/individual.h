@@ -27,59 +27,48 @@ namespace FT{
         unsigned int rank;                          ///< pareto front rank
         float crowd_dist;                           ///< crowding distance on the Pareto front
         
-        Individual(){c = 0; dim = 0;}
+        Individual(){c = 0; dim = 0; eqn="";}
 
         ~Individual(){}
 
-        /*!
-         * @brief calculate program output matrix Phi
-         */
-        MatrixXd out(const MatrixXd& X, const VectorXd& y, const Parameters& params);
+        /// calculate program output matrix Phi
+        MatrixXd out(const MatrixXd& X, const Parameters& params, const VectorXd& y);
 
-        /*!
-         * @brief return symbolic representation of program
-         */
-        string get_eqn(char otype);
+        /// return symbolic representation of program
+        string get_eqn();
         
-        /*!
-         * @brief setting and getting from individuals vector
-         */
+        /// return program name list 
+        string program_str() const;
+
+        /// setting and getting from individuals vector
         const std::shared_ptr<Node> operator [](int i) const {return program[i];}
         const std::shared_ptr<Node> & operator [](int i) {return program[i];}
 
-        /*!
-         * @brief overload = to copy just the program
-         */
-        Individual& operator=(Individual rhs)   // note: pass-by-value for implicit copy of rhs
-        {
-            std::swap(this->program , rhs.program);
-            return *this;            
-        }
-
-        /*!
-         * @brief return size of program
-         */
+        /// set rank
+        void set_rank(unsigned r){rank=r;}
+        /// return size of program
         int size() const { return program.size(); }
         
-        /*!
-         * @brief grab sub-tree locations given starting point.
-         */
+        /// grab sub-tree locations given starting point.
         size_t subtree(size_t i, char otype) const;
 
        // // get program depth.
        // unsigned int depth();
 
-        /*!
-         * @brief get program dimensionality
-         */
+        /// get program dimensionality
         unsigned int get_dim();
+        
         /// check whether this dominates b. 
         int check_dominance(const Individual& b) const;
+        
         /// set obj vector given a string of objective names
         void set_obj(const vector<string>&); 
+        
         /// calculate program complexity. 
         unsigned int complexity();
-       
+      
+        /// find root locations in program.
+        vector<size_t> roots();
        
         unsigned int c;            ///< the complexity of the program.    
     };
@@ -87,8 +76,8 @@ namespace FT{
     /////////////////////////////////////////////////////////////////////////////////// Definitions
 
     // calculate program output matrix
-    MatrixXd Individual::out(const MatrixXd& X, const VectorXd& y, 
-                                const Parameters& params)
+    MatrixXd Individual::out(const MatrixXd& X, const Parameters& params, 
+                             const VectorXd& y = VectorXd())
     {
         /*!
          * Input:
@@ -106,53 +95,58 @@ namespace FT{
         vector<ArrayXb> stack_b;
 
         // evaluate each node in program
-        for (auto n : program)
+        for (const auto& n : program)
         {
         	if(stack_f.size() >= n->arity['f'] && stack_b.size() >= n->arity['b'])
-	            n->evaluate(X, y, stack_f, stack_b); 
+	            n->evaluate(X, y, stack_f, stack_b);
+            else
+            {
+                std::cout << "node " << n->name << " in " + program_str() + " is invalid\n";
+                exit(1);
+            }
         }
         
         // convert stack_f to Phi
         int cols = stack_f[0].size();
-        int rows = stack_f.size();
-        double * p = stack_f[0].data();
-        // TODO: need to conditional this on the output type parameter
-        Matrix<double,Dynamic,Dynamic,RowMajor> Phi (rows, cols);
-        
-        for (unsigned int i=0; i<rows; ++i)
+        int rows_f = stack_f.size();
+        int rows_b = stack_b.size();
+        Matrix<double,Dynamic,Dynamic,RowMajor> Phi (rows_f+rows_b, cols);
+              
+        // add stack_f to Phi
+        for (unsigned int i=0; i<rows_f; ++i)
             Phi.row(i) = VectorXd::Map(stack_f[i].data(),cols);
-        ////check Phi
-        //for (int i =0; i<rows; ++i){
-        //    std::cout <<"stack_f["<< i <<"]: " << stack_f[i].transpose() << "\n";
-        //}
-        //for (int i=0; i<rows; ++i){
-        //    std::cout <<"  Phi("<<i<<",:): " << Phi.row(i) << "\n";  
-        //} 
 
+        // convert stack_b to Phi       
+        for (unsigned int i=0; i<rows_b; ++i)
+            Phi.row(i+rows_f) = ArrayXb::Map(stack_b[i].data(),cols).cast<double>();
+                
         //Phi.transposeInPlace();
         return Phi;
     }
 
     // return symbolic representation of program 
-    string Individual::get_eqn(char otype='f')
+    string Individual::get_eqn()
     {
         if (eqn.empty())               // calculate eqn if it doesn't exist yet 
         {
             vector<string> stack_f;     // symbolic floating stack
             vector<string> stack_b;     // symbolic boolean stack
 
-            for (auto n : program)
+            for (auto n : program){
             	if(stack_f.size() >= n->arity['f'] && stack_b.size() >= n->arity['b'])
                 	n->eval_eqn(stack_f,stack_b);
+                else
+                {
+                    std::cout << "node " << n->name << " in " + program_str() + " is invalid\n";
+                    exit(1);
+                }
 
-            // tie stack outputs together to return representation
-            if (otype=='b'){
-                for (auto s : stack_b) 
-                    eqn += "[" + s + "]";
             }
-            else
-                for (auto s : stack_f) 
-                    eqn += "[" + s + "]";
+            // tie stack outputs together to return representation
+            for (auto s : stack_f) 
+                eqn += "[" + s + "]";
+            for (auto s : stack_b) 
+                eqn += "[" + s + "]";              
         }
 
         return eqn;
@@ -174,24 +168,27 @@ namespace FT{
         
         * note that this function assumes a subtree's arguments to be contiguous in the program.
         */
-        
-       if (program[i]->total_arity()==0) return i;
-
+       
+       size_t tmp = i;
+       assert(i>=0 && "attempting to grab subtree with index < 0");
+              
+       if (program[i]->total_arity()==0)    // return this index if it is a terminal
+           return i;
+       
        std::map<char, unsigned int> arity = program[i]->arity;
 
-       if (otype!='0')  // otype=0 means we are at the root. if we are recursing, we need to find 
+       if (otype!='0')  // if we are recursing (otype!='0'), we need to find 
                         // where the nodes to recurse are.  
        {
-           while (program[i-1]->otype != otype && i > 0) --i;
+           while (i>0 && program[i]->otype != otype) --i;    
            assert(program[i]->otype == otype && "invalid subtree arguments");
        }
+              
+       for (unsigned int j = 0; j<arity['f']; ++j)  
+           i = subtree(--i,'f');                   // recurse for floating arguments      
        size_t i2 = i;                              // index for second recursion
-       
-       for (unsigned int j = 0; j<arity['f']; ++j)
-           i = subtree(--i,'f');                  // recurse for floating arguments
        for (unsigned int j = 0; j<arity['b']; ++j)
            i2 = subtree(--i2,'b');                 // recurse for boolean arguments
-      
        return std::min(i,i2);
     }
    
@@ -259,16 +256,16 @@ namespace FT{
         /*! Input:
          *      objectives: vector of strings naming objectives.
          */
-        if (obj.empty())
+        obj.clear();
+        
+        for (const auto& n : objectives)
         {
-            for (const auto& n : objectives)
-            {
-                if (n.compare("fitness")==0)
-                    obj.push_back(fitness);
-                else if (n.compare("complexity")==0)
-                    obj.push_back(complexity());
-            }
+            if (n.compare("fitness")==0)
+                obj.push_back(fitness);
+            else if (n.compare("complexity")==0)
+                obj.push_back(complexity());
         }
+    
     }
 
     unsigned int Individual::complexity()
@@ -297,6 +294,47 @@ namespace FT{
         }
         return c;
     }
+
+    vector<size_t> Individual::roots()
+    {
+        // find "root" nodes of floating point program, where roots are final values that output 
+        // something directly to the stack
+        vector<size_t> indices;     // returned root indices
+        int total_arity = -1;       //end node is always a root
+        
+        for (size_t i = program.size(); i>0; --i)   // reverse loop thru program
+        {    
+            if (total_arity <= 0 ){ // root node
+                indices.push_back(i-1);
+                total_arity=0;
+            }
+            else
+                --total_arity;
+           
+            total_arity += program[i-1]->total_arity(); 
+           
+        }
+        
+        return indices; 
+    }
+
+    string Individual::program_str() const
+    {
+        /* returns a string of program names. */
+        string s = "";
+        for (const auto& p : program)
+        {
+            if (!p->name.compare("x"))   // if a variable, include the location data
+            {
+                s += p->name+"_"+std::to_string(std::dynamic_pointer_cast<NodeVariable>(p)->loc); 
+            }
+            else
+                s+= p->name;
+            s+=" ";
+        }
+        return s;
+    }
+
 }
 
 #endif

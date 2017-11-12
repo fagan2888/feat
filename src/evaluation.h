@@ -14,7 +14,7 @@ license: GNU/GPL v3
 #include <shogun/features/Features.h>                                                               
 //#include <shogun/preprocessor/PruneVarSubMean.h>        
 #include <shogun/preprocessor/NormOne.h>        
-
+#include <cmath>
 // internal includes
 #include "ml.h"
 
@@ -37,21 +37,16 @@ namespace FT{
 
             ~Evaluation(){}
                 
-            /*!
-             * @brief fitness of population.
-             */
+            
+            /// fitness of population.
             void fitness(Population& pop, const MatrixXd& X, VectorXd& y, MatrixXd& F, 
                          const Parameters& params, bool offspring);
 
-            /*!
-             * @brief output of an ml model. 
-             */
+            /// output of an ml model. 
             VectorXd out_ml(MatrixXd& Phi, VectorXd& y, const Parameters& params,
-                            std::shared_ptr<ML> ml = nullptr);
+                            bool& pass, std::shared_ptr<ML> ml = nullptr);
 
-            /*! 
-             * @brief assign fitness to an individual and to F. 
-             */
+            /// assign fitness to an individual and to F.  
             void assign_fit(Individual& ind, MatrixXd& F, const VectorXd& yhat, const VectorXd& y,
                             const Parameters& params);       
             
@@ -83,18 +78,23 @@ namespace FT{
         unsigned start =0;
         if (offspring) start = F.cols()/2;
         // loop through individuals
-//TODO:        #pragma omp parallel for
+        #pragma omp parallel for
         for (unsigned i = start; i<pop.size(); ++i)
         {
             // calculate program output matrix Phi
             params.msg("Generating output for " + pop.individuals[i].get_eqn(), 2);
-            MatrixXd Phi = pop.individuals[i].out(X, y, params);
+            MatrixXd Phi = pop.individuals[i].out(X, params, y);
             
 
             // calculate ML model from Phi
             params.msg("ML training on " + pop.individuals[i].get_eqn(), 2);
-            VectorXd yhat = out_ml(Phi,y,params);
-            
+            bool pass = true;
+            VectorXd yhat = out_ml(Phi,y,params,pass);
+            if (!pass){
+                std::cerr << "Error training eqn " + pop.individuals[i].get_eqn() + "\n";
+                std::cerr << "with raw output " << pop.individuals[i].out(X,params,y) << "\n";
+                throw;
+            }
             // assign F and aggregate fitness
             params.msg("Assigning fitness to " + pop.individuals[i].get_eqn(), 2);
             assign_fit(pop.individuals[i],F,yhat,y,params);
@@ -106,7 +106,7 @@ namespace FT{
     
     // train ML model and generate output
     VectorXd Evaluation::out_ml(MatrixXd& X, VectorXd& y, const Parameters& params,
-                                std::shared_ptr<ML> ml)
+                                bool& pass, std::shared_ptr<ML> ml)
     { 
     	/*!
          * Trains ml on X, y to generate output yhat = f(X). 
@@ -124,40 +124,56 @@ namespace FT{
         */
 
         if (ml == nullptr)      // make new ML estimator if one is not provided 
-        {
-            ml = std::make_shared<ML>(params.ml,params.classification);
-        }
+            ml = std::make_shared<ML>(params.ml,params.classification);       
         
-        
-        // define shogun data 
+        if (params.verbosity >2) 
+            std::cout << "thread " + std::to_string(omp_get_thread_num()) + " X: " << X << "\n"; 
 
+        //std::cout << "thread" + std::to_string(omp_get_thread_num()) + " normalize features\n";
         // normalize features
-        //for (unsigned int i=0; i<X.rows(); ++i){
-        //    X.row(i) = X.row(i).array() - X.row(i).mean();
-        //    if (X.row(i).norm() > NEAR_ZERO)
-        //        X.row(i).normalize();
-        //}
-        X.rowwise().normalize();
-
+        for (unsigned int i=0; i<X.rows(); ++i){
+            if (std::isinf(X.row(i).norm()))
+            {
+                X.row(i) = VectorXd::Zero(X.row(i).size());
+                continue;
+            }
+            X.row(i) = X.row(i).array() - X.row(i).mean();
+            if (X.row(i).norm() > NEAR_ZERO)
+                X.row(i).normalize();
+        }
+        //X.rowwise().normalize();
+                // define shogun data
         auto features = some<CDenseFeatures<float64_t>>(SGMatrix<float64_t>(X));
         auto labels = some<CRegressionLabels>(SGVector<float64_t>(y));
      
         // pass data to ml
-        //ml->p_est->set_features(features);
         ml->p_est->set_labels(labels);
 
         // train ml
-        ml->p_est->train(features);
-
+        //std::cout << "thread" + std::to_string(omp_get_thread_num()) + " train\n";
+        params.msg("ML training on thread" + std::to_string(omp_get_thread_num()) + "...",2," ");
+        #pragma omp critical
+        {
+            ml->p_est->train(features);
+        }
+        params.msg("done.",2);
+        //std::cout << "thread" + std::to_string(omp_get_thread_num()) + " get output\n";
         //get output
         auto y_pred = ml->p_est->apply_regression(features)->get_labels();
 
         // weights
         vector<double> w = ml->get_weights();
 
+        //std::cout << "thread" + std::to_string(omp_get_thread_num()) + " map to vector\n";
+
         // map to Eigen vector
         Map<VectorXd> yhat(y_pred.data(),y_pred.size());
         
+        if (Eigen::isinf(yhat.array()).any() || Eigen::isnan(yhat.array()).any())
+        {
+            std::cerr << "inf or nan values in model fit to: " << X << "\n";
+            pass = false;
+        }
         // return
         return yhat;
     }
@@ -177,14 +193,16 @@ namespace FT{
          *       y: true labels
          *       params: fewtwo parameters
          *
-        
          *  Output:
-         
+         *
          *       modifies F and ind.fitness
         */ 
-
-        F.col(ind.loc) = (yhat - y).array().pow(2);
+        if (params.classification)  // use classification accuracy
+            F.col(ind.loc) = (yhat.cast<int>().array() != y.cast<int>().array()).cast<double>();
+        else                        // use mean squared error
+            F.col(ind.loc) = (yhat - y).array().pow(2);
         
+        // set fitness to average 
         ind.fitness = F.col(ind.loc).mean();
         params.msg("ind " + std::to_string(ind.loc) + " fitnes: " + std::to_string(ind.fitness),2);
     }

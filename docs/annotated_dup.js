@@ -1,7 +1,6 @@
 var annotated_dup =
 [
     [ "FT", null, [
-      [ "comparator_obj", "df/dae/structFT_1_1comparator__obj.html", "df/dae/structFT_1_1comparator__obj" ],
       [ "Evaluation", "df/db3/classFT_1_1Evaluation.html", "df/db3/classFT_1_1Evaluation" ],
       [ "Fewtwo", "dc/d9e/classFT_1_1Fewtwo.html", "dc/d9e/classFT_1_1Fewtwo" ],
       [ "Individual", "df/d8a/structFT_1_1Individual.html", "df/d8a/structFT_1_1Individual" ],
@@ -12,7 +11,6 @@ var annotated_dup =
       [ "NodeAnd", "dc/da3/classFT_1_1NodeAnd.html", "dc/da3/classFT_1_1NodeAnd" ],
       [ "NodeConstant", "da/d77/classFT_1_1NodeConstant.html", "da/d77/classFT_1_1NodeConstant" ],
       [ "NodeCos", "d6/da2/classFT_1_1NodeCos.html", "d6/da2/classFT_1_1NodeCos" ],
-      [ "NodeCosine", "db/d3b/classFT_1_1NodeCosine.html", "db/d3b/classFT_1_1NodeCosine" ],
       [ "NodeCube", "d1/d36/classFT_1_1NodeCube.html", "d1/d36/classFT_1_1NodeCube" ],
       [ "NodeDivide", "d7/d5c/classFT_1_1NodeDivide.html", "d7/d5c/classFT_1_1NodeDivide" ],
       [ "NodeEqual", "d9/d69/classFT_1_1NodeEqual.html", "d9/d69/classFT_1_1NodeEqual" ],
@@ -30,7 +28,6 @@ var annotated_dup =
       [ "NodeOr", "d7/d13/classFT_1_1NodeOr.html", "d7/d13/classFT_1_1NodeOr" ],
       [ "NodeRoot", "db/da6/classFT_1_1NodeRoot.html", "db/da6/classFT_1_1NodeRoot" ],
       [ "NodeSin", "da/d1c/classFT_1_1NodeSin.html", "da/d1c/classFT_1_1NodeSin" ],
-      [ "NodeSine", "d6/d0e/classFT_1_1NodeSine.html", "d6/d0e/classFT_1_1NodeSine" ],
       [ "NodeSqrt", "d7/d49/classFT_1_1NodeSqrt.html", "d7/d49/classFT_1_1NodeSqrt" ],
       [ "NodeSquare", "d4/da1/classFT_1_1NodeSquare.html", "d4/da1/classFT_1_1NodeSquare" ],
       [ "NodeSubtract", "d1/d46/classFT_1_1NodeSubtract.html", "d1/d46/classFT_1_1NodeSubtract" ],
@@ -41,7 +38,8 @@ var annotated_dup =
       [ "Rnd", "dd/d2d/classFT_1_1Rnd.html", "dd/d2d/classFT_1_1Rnd" ],
       [ "Selection", "de/d87/structFT_1_1Selection.html", "de/d87/structFT_1_1Selection" ],
       [ "SelectionOperator", "d2/d3a/structFT_1_1SelectionOperator.html", "d2/d3a/structFT_1_1SelectionOperator" ],
-      [ "sort_n", "df/d63/structFT_1_1sort__n.html", "df/d63/structFT_1_1sort__n" ],
+      [ "Timer", "d3/d4e/classFT_1_1Timer.html", "d3/d4e/classFT_1_1Timer" ],
       [ "Variation", "d3/d01/classFT_1_1Variation.html", "d3/d01/classFT_1_1Variation" ]
-    ] ]
+    ] ],
+    [ "InputParser", "de/d16/classInputParser.html", "de/d16/classInputParser" ]
 ];

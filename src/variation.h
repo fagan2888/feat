@@ -21,48 +21,48 @@ namespace FT{
          */
 
         public:
-            /*!
-             * @brief constructor
-             */
+        
+            /// constructor
             Variation(float cr): cross_rate(cr) {}
-            
-            /*!
-             * @brief update cross rate
-             */            
-            void set_cross_rate(float &cr)
+                       
+            /// update cross rate
+            void set_cross_rate(float cr)
             {
             	cross_rate = cr;
             }
             
-            /*!
-             * @brief destructor
-             */
+            /// return current cross rate
+            float get_cross_rate()
+            {
+            	return cross_rate;
+            }
+            
+             /// destructor
             ~Variation(){}
 
-            /*!
-             * @brief method to handle variation of population
-             */
+            /// method to handle variation of population
             void vary(Population& pop, const vector<size_t>& parents, const Parameters& params);
             
         private:
-            /*!
-             * @brief crossover 
-             */
+        
+            /// crossover
             bool cross(Individual& mom, Individual& dad, Individual& child,
                        const Parameters& params);
-
-            /*!
-             * @brief mutation
-             */
+            
+            /// mutation
             bool mutate(Individual& mom, Individual& child, const Parameters& params);
-        
+            void point_mutate(Individual& child, const Parameters& params);
+            void insert_mutate(Individual& child, const Parameters& params);
+            void delete_mutate(Individual& child, const Parameters& params);
+ 
             /// splice two programs together
             vector<std::shared_ptr<Node>> splice_programs(vector<std::shared_ptr<Node>>& v1, 
                                                           size_t i1, size_t j1, 
                                                           vector<std::shared_ptr<Node>>& v2,
                                                           size_t i2, size_t j2);
             /// debugging printout of crossover operation.
-            void print_cross(Individual&,size_t,size_t,Individual&, size_t, size_t, Individual&);       
+            void print_cross(Individual&,size_t,size_t,Individual&, size_t, size_t, Individual&,
+                             bool after=true);       
             
             float cross_rate;     ///< fraction of crossover in total variation
     };
@@ -75,17 +75,12 @@ namespace FT{
         /*!
          * performs variation on the current population. 
          *
-         * Input:
+         * @param   pop: current population
+         * @param  	parents: indices of population to use for variation
+         * @param  	params: fewtwo parameters
          *
-         *      	pop: current population
-         *      	parents: indices of population to use for variation
-         *      	params: fewtwo parameters
-         *
-         * Output:
-         *
-         *      	pop: appends params.pop_size offspring derived from parent variation
+         * @return  appends params.pop_size offspring derived from parent variation
          */
-        // vector<size_t> other_parents;    // parents other than one chosen for crossover
         bool pass;                      // pass check for children undergoing variation       
         while (pop.size() < 2*params.pop_size)
         {
@@ -95,32 +90,37 @@ namespace FT{
             {
                 // get random mom and dad 
                 int mom = r.random_choice(parents);
-          //      other_parents.assign(parents.begin(),parents.begin()+mom);
-            //    other_parents.insert(other_parents.end();parents.begin()+mom+1,parents.end());
                 int dad = r.random_choice(parents);
                 // create child
                 params.msg("crossing " + pop.individuals[mom].get_eqn() + " with " + 
                            pop.individuals[dad].get_eqn(), 2);
                 pass = cross(pop.individuals[mom],pop.individuals[dad],child,params);
-                
+            
+                params.msg("crossing " + pop.individuals[mom].get_eqn() + " with " + 
+                       pop.individuals[dad].get_eqn() + " produced " + child.get_eqn() + ", pass: " 
+                       + std::to_string(pass),2);    
             }
             else                        // mutation
             {
                 // get random mom
                 int mom = r.random_choice(parents);                
-                params.msg("mutating " + pop.individuals[mom].get_eqn(), 2);
+                params.msg("mutating " + pop.individuals[mom].get_eqn() + "(" + 
+                        pop.individuals[mom].program_str() + ")", 2);
                 // create child
                 pass = mutate(pop.individuals[mom],child,params);
+                
+                params.msg("mutating " + pop.individuals[mom].get_eqn() + " produced " + 
+                        child.get_eqn() + ", pass: " + std::to_string(pass),2);
             }
             
-            params.msg("child: " + child.get_eqn() + ", pass: " + std::to_string(pass),2);
+            
             
             if (pass)                   // congrats! you produced a viable child.
             {
                 // give child an open location in F
-                child.loc = pop.get_open_loc(); 
+                //child.loc = pop.get_open_loc(); 
                 //push child into pop
-                pop.individuals.push_back(child);
+                pop.add(child);
             }
         }
     }
@@ -128,28 +128,54 @@ namespace FT{
     bool Variation::mutate(Individual& mom, Individual& child, const Parameters& params)
     {
         /*!
-         * 1/n point mutation
+         * chooses uniformly between point mutation, insert mutation and delete mutation 
          * 
-         * Input:
-         *
-         *      	mom: root parent
-         *
-         * Output:
-         *
-         *      	child: copy of mom with some mutations
+         * @param   mom: parent
+         * @param   child: offspring produced by mutating mom 
+         * @param   params: parameters
+         * 
+         * @return  true if valid child, false if not 
          */    
 
         // make child a copy of mom
-        child = mom; 
-        float n = child.size();
+        child.program = mom.program; 
+        
+        float rf = r();
+        if (rf < 1.0/3.0 && child.get_dim() > 1){
+            delete_mutate(child,params); 
+            assert(is_valid_program(child.program, params.num_features));
+        }
+        else if (rf < 2.0/3.0 && child.size() < params.max_size)
+        {
+            insert_mutate(child,params);
+            assert(is_valid_program(child.program, params.num_features));
+        }
+        else
+        {        
+            point_mutate(child,params);
+            assert(is_valid_program(child.program, params.num_features));
+        }
+ 
+        // check child depth and dimensionality
+        return child.size() <= params.max_size && child.get_dim() <= params.max_dim;
+    }
 
+    void Variation::point_mutate(Individual& child, const Parameters& params)
+    {
+        /*! 1/n point mutation. 
+         * @param child: individual to be mutated
+         * @param params: parameters 
+         * @returns modified child
+         * */
+        params.msg("\tpoint mutation",2);
+        float n = child.size(); 
+        
         // loop thru child's program
         for (auto& p : child.program)
         {
-
             if (r() < 1/n)  // mutate p. TODO: change '1' to node weighted probability
             {
-                params.msg("mutating node " + p->name, 2);
+                params.msg("\t\tmutating node " + p->name, 2);
                 vector<std::shared_ptr<Node>> replacements;  // potential replacements for p
 
                 if (p->total_arity() > 0) // then it is an instruction
@@ -177,60 +203,193 @@ namespace FT{
                 p = r.random_choice(replacements);  
             }
         }
-        // check child depth and dimensionality
-        return child.size() <= params.max_size && child.get_dim() <= params.max_dim;
+
+    }
+    void Variation::insert_mutate(Individual& child, const Parameters& params)
+    {        
+        /*! insertion mutation. 
+         * @param child: indiviudal to be mutated
+         * @param params: parameters
+         * @returns modified child
+         * */
+        //TODO: make adding a new dimension one of the insertion mutation options
+        params.msg("\tinsert mutation",2);
+        float n = child.size(); 
+        if (r()<0.5 || child.get_dim() == params.max_dim)
+        {
+            // loop thru child's program
+            for (unsigned i = 0; i< child.program.size(); ++i)
+            {
+                if (r() < 1/n)  // mutate p. TODO: change '1' to node weighted probability
+                {
+                    params.msg("\t\tinsert mutating node " + child.program[i]->name, 2);
+                    vector<std::shared_ptr<Node>> insertion;  // inserted segment
+                    vector<std::shared_ptr<Node>> fns;  // potential fns 
+                    
+                    // find instructions with matching output types and a matching arity to i
+                    for (const auto& f: params.functions)
+                    {                         
+                        if (f->arity[child.program[i]->otype] > 0 && 
+                                f->otype==child.program[i]->otype )
+                        { // assuming no boolean terminals, the function's boolean arity 
+                          // must be fully satisfied by the child 
+                          // program node
+                            if (child.program[i]->otype=='b' && f->arity['b']==1 ||
+                                    child.program[i]->otype=='f' && f->arity['b']==0)
+                                fns.push_back(f);                        
+                        }
+                    }
+                    // if fns all have positive boolean arities, assuming inputs are continuous,
+                    // just continue
+                    //int bfs=0;
+                    //for (const auto& f: fns)
+                    //    if (f->arity['b']>0) ++bfs;
+                    //if (bfs == fns.size()) 
+                    //    continue;
+                    if (fns.size()==0)  // if no insertion functions match, skip
+                        continue;
+                    // if doing insert mutation with a boolean node, hand construct insertion since
+                    // there are no boolean terminals 
+                    if (child.program[i]->otype=='b')
+                    {
+                        insertion.push_back(r.random_choice(fns));
+                        unsigned fa = insertion.back()->arity['f'];
+                        for (unsigned j = 0; j< fa; ++j)
+                            insertion.push_back(r.random_choice(params.terminals));
+                        insertion.push_back(child.program[i]);
+                        std::reverse(insertion.begin(),insertion.end());
+                    }
+                    else
+                    {
+                        insertion.push_back(r.random_choice(fns));
+                        unsigned fa = insertion.back()->arity['f']-1;
+                        for (unsigned j = 0; j< fa; ++j)
+                            insertion.push_back(r.random_choice(params.terminals));
+                        insertion.push_back(child.program[i]);
+                        std::reverse(insertion.begin(),insertion.end());
+                       // make_program(insertion, fns, params.terminals, 1,  
+                       //              params.term_weights,1, child.program[i]->otype);
+                       // 
+                       // for (auto& ins : insertion){    // replace first argument in insertion
+                       //     if (ins->otype == child.program[i]->otype 
+                       //             && ins->arity['f']==child.program[i]->arity['f'] 
+                       //             && ins->arity['b']==child.program[i]->arity['b'])
+                       //     {
+                       //         ins = child.program[i];
+                       //         continue;
+                       //     }
+
+                       // }
+                    }
+                    child.program.erase(child.program.begin()+i);
+                    child.program.insert(child.program.begin()+i, insertion.begin(), 
+                                         insertion.end());
+                    i += insertion.size()-1;
+               }
+                
+            }
+        }
+        else    // add a dimension
+        {            
+            vector<std::shared_ptr<Node>> insertion; // new dimension
+            make_program(insertion, params.functions, params.terminals, 1,  
+                         params.term_weights,1,r.random_choice(params.otypes));
+            child.program.insert(child.program.end(),insertion.begin(),insertion.end());
+        }
+    }
+
+    void Variation::delete_mutate(Individual& child, const Parameters& params)
+    {
+
+        /*! deletion mutation. works by pruning a dimension. 
+         * @param child: individual to be mutated
+         * @param params: parameters  
+         * @return mutated child
+         * */
+        params.msg("\tdeletion mutation",2);
+        params.msg("\t\tprogram: " + child.program_str(),2);
+        vector<size_t> roots = child.roots();
+        size_t end = r.random_choice(roots); // TODO: weight with node weights
+        size_t start = child.subtree(end);  
+        if (params.verbosity >=2)
+        { 
+            std::string s="";
+            for (unsigned i = start; i<end; ++i) s+= child.program[i]->name + " ";
+            params.msg("\t\tdeleting " + std::to_string(start) + " to " + std::to_string(end) 
+                       + ": " + s, 2);
+        }    
+        child.program.erase(child.program.begin()+start,child.program.begin()+end+1);
+        params.msg("\t\tresult of delete mutation: " + child.program_str(), 2);
     }
 
     bool Variation::cross(Individual& mom, Individual& dad, Individual& child, 
                           const Parameters& params)
     {
         /*!
-         * subtree crossover
+         * crossover by either subtree crossover or swapping of dimensions. 
          *
-         * Input:
+         * @param   mom: root parent
+         * @param   dad: parent from which subtree is chosen
+         * @param   child: result of cross
+         * @param   params: parameters
          *
-         *      	mom: root parent
-         *      	dad: parent from which subtree is chosen
-         *
-         * Output:
-         *
-         *      	child: mom with dad subtree graft
+         * @return  child: mom with dad subtree graft
          */
                     
-       // we must limit ourselves to matching output types in the programs. 
-       vector<char> otypes;
-       for (const auto& p : mom.program)
-           if (not_in(otypes,p->otype)) otypes.push_back(p->otype);
-       for (const auto& p : dad.program)
-           if (not_in(otypes,p->otype)) otypes.push_back(p->otype); 
+        bool subtree = r() <0.5;     // half the time, do subtree xo. 
+                                     // half the time, swap dimensions.
+        vector<size_t> mlocs, dlocs; // mom and dad locations for consideration
+        size_t i1, j1, i2, j2;       // i1-j1: mom portion, i2-j2: dad portion
+        
+        if (subtree) 
+        {
+            params.msg("\tsubtree xo",2);
+            // limit xo choices to matching output types in the programs. 
+            vector<char> d_otypes;
+            for (const auto& p : dad.program)
+                if(!in(d_otypes,p->otype))
+                    d_otypes.push_back(p->otype);
+            
+            // get valid subtree locations
+            for (size_t i =0; i<mom.size(); ++i) 
+                if (in(d_otypes,mom[i]->otype)) 
+                    mlocs.push_back(i);       
+            if (mlocs.size()==0)        // mom and dad have no overlapping types, can't cross
+            {
+                std::cout << "\tno overlapping types between " + mom.program_str() + "," 
+                             + dad.program_str() + "\n";
+                return 0;               
+            }
+            j1 = r.random_choice(mlocs);    
 
-       // get valid subtree locations
-       vector<size_t> locs;
-       for (size_t i =0; i<mom.size(); ++i) 
-           if (in(otypes,mom[i]->otype)) locs.push_back(i);       
-
-       // get subtree
-       size_t j1 = r.random_choice(locs);
-       size_t i1 = mom.subtree(j1);
-   
-       // get locations in dad's program that match the subtree type picked from mom
-       vector<size_t> dlocs;
-       for (size_t i =0; i<dad.size(); ++i) 
-           if (dad[i]->otype == mom[j1]->otype) dlocs.push_back(i);
+            // get locations in dad's program that match the subtree type picked from mom
+            for (size_t i =0; i<dad.size(); ++i) 
+                if (dad[i]->otype == mom[j1]->otype) dlocs.push_back(i);
+        } 
+        else             // half the time, pick a root node
+        {
+            params.msg("\troot xo",2);
+            mlocs = mom.roots();
+            dlocs = dad.roots();
+            params.msg("\t\trandom choice mlocs (size "+std::to_string(mlocs.size())+")",2);
+            j1 = r.random_choice(mlocs);    
+        }
+        // get subtree              
+        i1 = mom.subtree(j1);
+                             
+        // get dad subtree
+        j2 = r.random_choice(dlocs);
+        i2 = dad.subtree(j2); 
+               
+        // make child program by splicing mom and dad
+        child.program = splice_programs(mom.program, i1, j1, dad.program, i2, j2);
                      
-       // get dad subtree
-       size_t j2 = r.random_choice(dlocs);
-       size_t i2 = dad.subtree(j2);
-       
-       
-       // make child program by splicing mom and dad
-       child.program = splice_programs(mom.program, i1, j1, dad.program, i2, j2);
-                    
-       if (params.verbosity >= 2) 
-           print_cross(mom,i1,j1,dad,i2,j2,child);     
-      
-       // check child depth and dimensionality
-       return child.size() <= params.max_size && child.get_dim() <= params.max_dim;
+        if (params.verbosity >= 2) 
+            print_cross(mom,i1,j1,dad,i2,j2,child);     
+
+        assert(is_valid_program(child.program,params.num_features));
+        // check child depth and dimensionality
+        return child.size() <= params.max_size && child.get_dim() <= params.max_dim;
     }
     
     // swap vector subsets with different sizes. 
@@ -239,21 +398,17 @@ namespace FT{
                                      vector<std::shared_ptr<Node>>& v2, size_t i2, size_t j2)
     {
         /*!
-         * @brief swap vector subsets with different sizes. 
+         * swap vector subsets with different sizes. 
          * constructs a vector made of v1[0:i1], v2[i2:j2], v1[i1:end].
          *
-         * Input:
+         * @param   v1: root parent 
+         * @param       i1: start of splicing segment 
+         * @param       j1: end of splicing segment
+         * @param   v2: donating parent
+         * @param       i2: start of donation
+         * @param       j2: end of donation
          *
-         *      v1: root parent 
-         *          i1: start of splicing segment 
-         *          j1: end of splicing segment
-         *      v2: donating parent
-         *          i2: start of donation
-         *          j2: end of donation
-         *
-         * Output: 
-         *
-         *      vnew: new vector 
+         * @return  vnew: new vector 
          */
 
         // size difference between subtrees  
@@ -265,26 +420,36 @@ namespace FT{
     }
     
     void Variation::print_cross(Individual& mom, size_t i1, size_t j1, Individual& dad, size_t i2, 
-                                size_t j2, Individual& child)
+                                size_t j2, Individual& child, bool after)
     {
-        std::cout << "attempting the following crossover:\n";
-           for (int i =0; i<mom.program.size(); ++i){
-               if (i>= i1 && i<= j1) 
-                   std::cout << "*";
-               std::cout << mom.program[i]->name << " ";
-           }
-           std::cout << "\n";
-           
-           for (int i =0; i<dad.program.size(); ++i){
-               if (i>= i2 && i<= j2) 
-                   std::cout << "*";
-               std::cout << dad.program[i]->name << " ";
-           }
-           std::cout << "\n";
-           std::cout << "child after cross:\n";
-           for (auto& p : child.program)
-                std::cout << p->name << " "; 
-           std::cout << "\n";
+        std::cout << "\t\tattempting the following crossover:\n\t\t";
+        for (int i =0; i<mom.program.size(); ++i){
+           if (i== i1) 
+               std::cout << "[";
+           std::cout << mom.program[i]->name << " ";
+           if (i==j1)
+               std::cout <<"]";
+        }
+        std::cout << "\n\t\t";
+       
+        for (int i =0; i<dad.program.size(); ++i){
+            if (i== i2) 
+                std::cout << "[";
+            std::cout << dad.program[i]->name << " ";
+            if (i==j2)
+                std::cout <<"]";
+        }
+        std::cout << "\n\t\t";
+        if (after)
+        {
+            std::cout << "child after cross: ";
+            for (unsigned i = 0; i< child.program.size(); ++i){
+                if (i==i1) std::cout << "[";
+                std::cout << child.program[i]->name << " ";
+                if (i==i1+j2-i2) std::cout << "]";
+            }
+            std::cout << "\n";
+        }
     }
 }
 #endif

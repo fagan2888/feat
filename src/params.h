@@ -21,7 +21,7 @@ namespace FT{
         string ml;                      			///< machine learner with which Fewtwo is paired
         bool classification;            			///< flag to conduct classification rather than 
         int max_stall;                  			///< maximum stall in learning, in generations
-        char otype;                     			///< program output type ('f', 'b')
+        vector<char> otypes;                     	///< program output types ('f', 'b')
         int verbosity;                  			///< amount of printing. 0: none, 1: minimal, 
                                                     // 2: all
         vector<double> term_weights;    			///< probability weighting of terminals
@@ -31,96 +31,119 @@ namespace FT{
         unsigned int max_size;          			///< max size of programs (length)
         unsigned int max_dim;           			///< maximum dimensionality of programs
         bool erc;								    ///<whether to include constants for terminals 
+        unsigned num_features;                      ///< number of features
         vector<string> objectives;                  ///< Pareto objectives 
+        bool shuffle;                               ///< option to shuffle the data
+        double split;                               ///< fraction of data to use for training
 
-
-        Parameters(int pop_size, int gens, string& ml, bool classification, int max_stall, 
-                   char otype, int vebosity, string functions, unsigned int max_depth, 
-                   unsigned int max_dim, bool constant, string obj):    
+        Parameters(int pop_size, int gens, string ml, bool classification, int max_stall, 
+                   char otype, int verbosity, string fs, unsigned int max_depth, 
+                   unsigned int max_dim, bool constant, string obj, bool sh, double sp):    
             pop_size(pop_size),
             gens(gens),
             ml(ml),
             classification(classification),
-            max_stall(max_stall),
-            otype(otype), 
-            verbosity(verbosity),
+            max_stall(max_stall), 
             max_depth(max_depth),
             max_dim(max_dim),
-            erc(constant)
+            erc(constant),
+            shuffle(sh),
+            split(sp)
         {
-            set_functions(functions);
+        	set_verbosity(verbosity);
+            set_functions(fs);
             set_objectives(obj);
-            updateSize();         
+            updateSize();        
+            switch (otype)
+            { 
+                case 'b': otypes.push_back('b'); break;
+                case 'f': otypes.push_back('f'); break;
+                default: 
+                {
+                    for (const auto& f: functions)
+                        if (!in(otypes,f->otype)) 
+                            otypes.push_back(f->otype);
+                    for (const auto& t: terminals)
+                        if (!in(otypes,t->otype)) 
+                            otypes.push_back(t->otype);
+
+                    break;
+                }
+            }
+
         }
         
         ~Parameters(){}
 
-        /*!
-         * @brief print message with verbosity control. 
-         */
-        void msg(string m, int v, string sep="\n") const
+        /// print message with verbosity control. 
+        string msg(string m, int v, string sep="\n") const
         {
             /* prints messages based on verbosity level. */
-
+			string msg = "";
             if (verbosity >= v)
+            {
                 std::cout << m << sep;
+                msg += m+sep;
+            }
+            return msg;
         }
         
-        /*!
-         * @brief sets weights for terminals. 
-         */
+        /// sets weights for terminals. 
         void set_term_weights(const vector<double>& w)
         {
             std::cout << "w size: " << w.size() << "\n";
             std::cout << "terminals size: " << terminals.size() << "\n";
+            bool zeros = std::all_of(w.begin(), w.end(), [](int i) { return i==0; });
             assert(w.size()==terminals.size());
+            assert(!zeros);
             term_weights = w; 
         }
         
-        /*!
-         * @brief return shared pointer to a node based on the string passed
-         */
+        /// return shared pointer to a node based on the string passed
         std::shared_ptr<Node> createNode(std::string str, double d_val = 0, bool b_val = false, 
                                          size_t loc = 0);
         
-        /*!
-         * @brief sets available functions based on comma-separated list.
-         */
+        /// sets available functions based on comma-separated list.
         void set_functions(string fs);
         
-        /*!
-         * @brief max_size is max_dim binary trees of max_depth
-         */
+        /// max_size is max_dim binary trees of max_depth
         void updateSize()
         {
         	max_size = (pow(2,max_depth+1)-1)*max_dim;
         }
         
-        /*!
-         * @brief set max depth of programs
-         */
-        void set_max_depth(unsigned int &max_depth)
+        /// set max depth of programs
+        void set_max_depth(unsigned int max_depth)
         {
         	this->max_depth = max_depth;
         	updateSize();
         }
         
-        /*!
-         * @brief set maximum dimensionality of programs
-         */
-        void set_max_dim(unsigned int &max_dim)
+        /// set maximum dimensionality of programs
+        void set_max_dim(unsigned int max_dim)
         {
         	this->max_dim = max_dim;
         	updateSize();
         }
         
-        /*!
-         * @brief set the terminals
-         */
-        void set_terminals(int num_features);
+        /// set the terminals
+        void set_terminals(int nf);
 
         /// set the objectives
-        void set_objectives(string obj);   
+        void set_objectives(string obj);
+        
+        /// set level of debug info
+        void set_verbosity(int verbosity)
+            {
+            	if(verbosity <=2 && verbosity >=0)
+	            	this->verbosity = verbosity;
+	            else
+	            {
+	            	std::cerr << "'" + std::to_string(verbosity) + "' is not a valid verbosity. Setting to default 1\n";
+	            	std::cerr << "Valid Values :\n\t0 - none\n\t1 - minimal\n\t2 - all\n";
+	            	this->verbosity = 1;
+	            }
+            } 
 
     };
 
@@ -238,19 +261,25 @@ namespace FT{
             functions.push_back(createNode(token));
             fs.erase(0, pos + delim.length());
         } 
+        if (verbosity > 1){
+            std::cout << "functions set to [";
+            for (auto f: functions) std::cout << f->name << ", "; 
+            std::cout << "]\n";
+        }
     }
 
-    void Parameters::set_terminals(int num_features)
+    void Parameters::set_terminals(int nf)
     {
         /*!
          * based on number of features.
          */
-        
-        for (size_t i = 0; i < num_features; ++i)
+        terminals.clear();
+        num_features = nf; 
+        for (size_t i = 0; i < nf; ++i)
             terminals.push_back(createNode(string("x"), 0, 0, i));
     	
         if(erc)
-    		for (int i = 0; i < num_features; ++i)
+    		for (int i = 0; i < nf; ++i)
     		{
     			if(r() < 0.5)
     	       		terminals.push_back(createNode(string("kb"), 0, r(), 0));
@@ -268,6 +297,7 @@ namespace FT{
         string delim = ",";
         size_t pos = 0;
         string token;
+        objectives.clear();
         while ((pos = obj.find(delim)) != string::npos) 
         {
             token = obj.substr(0, pos);

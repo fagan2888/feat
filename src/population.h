@@ -27,44 +27,28 @@ namespace FT{
         Population(int p){individuals.resize(p);}
         ~Population(){}
         
-        /*!
-         * @brief initialize population of programs. 
-         */
-        void init(const Parameters& params);
+        /// initialize population of programs. 
+        void init(const Individual& starting_model, const Parameters& params);
         
-        /*!
-         * @brief update individual vector size 
-         */
-        void resize(int &pop_size){	individuals.resize(pop_size); }
+        /// update individual vector size 
+        void resize(int pop_size){	individuals.resize(pop_size); }
         
-        /*!
-         * @brief reduce programs to the indices in survivors.
-         */
+        /// reduce programs to the indices in survivors. 
         void update(vector<size_t> survivors);
         
-        /*!
-         * @brief returns population size
-         */
+        /// returns population size
         int size(){ return individuals.size(); }
 
-        /*!
-         * @brief returns an open location 
-         */
+        /// returns an open location 
         size_t get_open_loc(); 
         
-        /*!
-         * @brief updates open locations to reflect population.
-         */
+        /// updates open locations to reflect population.
         void update_open_loc();
 
-        /*!
-         * @brief adds a program to the population. 
-         */
+        /// adds a program to the population. 
         void add(Individual&);
         
-        /*!
-         * @brief setting and getting from individuals vector
-         */
+        /// setting and getting from individuals vector
         const Individual operator [](size_t i) const {return individuals.at(i);}
         const Individual & operator [](size_t i) {return individuals.at(i);}
 
@@ -72,7 +56,7 @@ namespace FT{
         string print_eqns(bool,string);
 
         /// return complexity-sorted Pareto front indices. 
-        vector<size_t> sorted_front();
+        vector<size_t> sorted_front(unsigned);
         
         /// Sort population in increasing complexity.
         struct SortComplexity
@@ -84,20 +68,51 @@ namespace FT{
                 return pop.individuals[i].complexity() < pop.individuals[j].complexity();
             }
         };
-        // make a program.
-        //void make_program(vector<Node>& program, const vector<Node>& functions, 
-        //                          const vector<Node>& terminals, int max_d, char otype, 
-        //                          const vector<double>& term_weights);
+        /// check for same fitness and complexity to filter uniqueness. 
+        struct SameFitComplexity
+        {
+            Population & pop;
+            SameFitComplexity(Population& p): pop(p){}
+            bool operator()(size_t i, size_t j)
+            {
+                return (pop.individuals[i].fitness == pop.individuals[j].fitness &&
+                       pop.individuals[i].complexity() == pop.individuals[j].complexity());
+            }
+        };
 
     };
 
     /////////////////////////////////////////////////////////////////////////////////// Definitions
-    
-    void make_program(vector<std::shared_ptr<Node>>& program, 
-                      const vector<std::shared_ptr<Node>>& functions, 
-                      const vector<std::shared_ptr<Node>>& terminals, int max_d, char otype, 
-                      const vector<double>& term_weights)
+ 
+    bool is_valid_program(vector<std::shared_ptr<Node>>& program, unsigned num_features)
     {
+        /*! checks whether program fulfills all its arities. */
+        vector<ArrayXd> stack_f; 
+        vector<ArrayXb> stack_b;
+        MatrixXd X = MatrixXd::Zero(num_features,2); 
+        VectorXd y = VectorXd::Zero(2); 
+        unsigned i = 0; 
+        for (const auto& n : program){
+            if ( stack_f.size() >= n->arity['f'] && stack_b.size() >= n->arity['b'])
+                n->evaluate(X, y, stack_f, stack_b);
+            else{
+                std::cout << "Error: ";
+                for (const auto& p: program) std::cout << p->name << " ";
+                std::cout << "is not a valid program because ";
+                std::cout << n->name << " at pos " << i << "is not satisfied\n";
+                return false; 
+            }
+            ++i;
+        }
+        return true;
+    }
+   
+    void make_tree(vector<std::shared_ptr<Node>>& program, 
+                      const vector<std::shared_ptr<Node>>& functions, 
+                      const vector<std::shared_ptr<Node>>& terminals, int max_d,  
+                      const vector<double>& term_weights, char otype)
+    {  
+                
         /*!
          * recursively builds a program with complete arguments.
          */
@@ -113,59 +128,98 @@ namespace FT{
                     tw.push_back(term_weights[i]);
                 }
             }
-            program.push_back(terminals[r.random_choice(ti,tw)]);
+            auto t = terminals[r.random_choice(ti,tw)];
+            //std::cout << t->name << " ";
+            program.push_back(t);
         }
         else
         {
-            // let fs be an index of functions whose output type matches ntype and with an input   
-            // type of float if max_d > 1 (assuming all input data is continouous) 
+            // let fi be indices of functions whose output type matches otype and, if max_d==1,
+            // with no boolean inputs (assuming all input data is floating point) 
             vector<size_t> fi;
             for (size_t i = 0; i<functions.size(); ++i)
-            {
-                if (functions[i]->otype == otype && (max_d>1 || functions[i]->arity['b']==0))
+                if (functions[i]->otype==otype && (max_d>1 || functions[i]->arity['b']==0))
                     fi.push_back(i);
+            //std::cout << "fi size: " << fi.size() << "\n";
+            if (fi.size()==0){
+                std::cout << "---\n";
+                std::cout << "f1.size()=0. current program: ";
+                for (auto p : program) std::cout << p->name << " ";
+                std::cout << "\n";
+                std::cout << "otype: " << otype << "\n";
+                std::cout << "max_d: " << max_d << "\n";
+                std::cout << "functions: ";
+                for (auto f: functions) std::cout << f->name << " ";
+                std::cout << "\n";
+                std::cout << "---\n";
             }
+            assert(fi.size() > 0 && "The operator set specified results in incomplete programs.");
+            
             // append a random choice from fs            
-            program.push_back(functions[r.random_choice(fi)]);
+            auto t = functions[r.random_choice(fi)];
+            //std::cout << t->name << " ";
+            program.push_back(t);
             
             std::shared_ptr<Node> chosen = program.back();
             // recurse to fulfill the arity of the chosen function
             for (size_t i = 0; i < chosen->arity['f']; ++i)
-                make_program(program, functions, terminals, max_d-1, 'f', term_weights);
+                make_tree(program, functions, terminals, max_d-1, term_weights,'f');
             for (size_t i = 0; i < chosen->arity['b']; ++i)
-                make_program(program, functions, terminals, max_d-1, 'b', term_weights);
+                make_tree(program, functions, terminals, max_d-1, term_weights, 'b');
 
         }
-    }    
 
-    void Population::init(const Parameters& params)
+    }
+
+    void make_program(vector<std::shared_ptr<Node>>& program, 
+                      const vector<std::shared_ptr<Node>>& functions, 
+                      const vector<std::shared_ptr<Node>>& terminals, int max_d, 
+                      const vector<double>& term_weights, int dim, char otype)
+    {
+  
+         
+        for (unsigned i = 0; i<dim; ++i)    // build trees
+            make_tree(program, functions, terminals, max_d, term_weights, otype);
+        
+        // reverse program so that it is post-fix notation
+        std::reverse(program.begin(),program.end());
+        assert(is_valid_program(program,terminals.size()));
+    }
+
+
+    void Population::init(const Individual& starting_model, const Parameters& params)
     {
         /*!
          *create random programs in the population, seeded by initial model weights 
          */
-        
-        size_t count = 0;
-        for (auto& ind : individuals){
+        int i = 0;        
+        size_t count = -1;
+        vector<char> otypes = {'b','f'};
+        for (auto& ind : individuals)
+        {
+            //std::cout << "i: " <<  i << "\n";
+            // the first individual is the starting model (i.e., the raw features)
+            if (count == -1)
+            {
+                ind = starting_model;                
+                ind.loc = ++count;
+                std::cout << ind.get_eqn() + "\n";
+                continue;
+            }
             // make a program for each individual
             // pick a max depth for this program
             // pick a dimensionality for this individual
-            int dim = r.rnd_int(1,params.max_dim);
+            int dim = r.rnd_int(1,params.max_dim);      
+            // pick depth from [params.min_depth, params.max_depth]
+            int depth =  r.rnd_int(1, params.max_depth);
+            
+            make_program(ind.program, params.functions, params.terminals, depth,
+                         params.term_weights,dim,r.random_choice(params.otypes));
 
-            for (unsigned int i = 0; i<dim; ++i)
-            {
-                // pick depth from [params.min_depth, params.max_depth]
-                int depth =  r.rnd_int(1, params.max_depth);
-                
-                make_program(ind.program, params.functions, params.terminals, depth,
-                             params.otype, params.term_weights);               
-                
-            }
-            // reverse program so that it is post-fix notation
-            std::reverse(ind.program.begin(),ind.program.end());
-                        
+            //std::cout << ind.get_eqn() + "\n";
+           
             // set location of individual and increment counter
-            ind.loc = count;         
-            ++count;               
+            ind.loc = ++count;                    
         }
         // define open locations
         update_open_loc(); 
@@ -173,16 +227,23 @@ namespace FT{
    
    void Population::update(vector<size_t> survivors)
    {
+
        /*!
         * cull population down to survivor indices.
         */
-       
-      individuals.erase(std::remove_if(individuals.begin(), individuals.end(), 
-                        [&survivors](const Individual& ind){ return not_in(survivors,ind.loc);}),
-                        individuals.end());
+       vector<size_t> pop_idx(individuals.size());
+       std::iota(pop_idx.begin(),pop_idx.end(),0);
+       std::reverse(pop_idx.begin(),pop_idx.end());
+       for (const auto& i : pop_idx)
+           if (!in(survivors,i))
+               individuals.erase(individuals.begin()+i);                         
+          
+       //individuals.erase(std::remove_if(individuals.begin(), individuals.end(), 
+       //                  [&survivors](const Individual& ind){ return !in(survivors,ind.loc);}),
+       //                  individuals.end());
 
-      // reset the open locations in F matrix 
-      update_open_loc();
+       // reset the open locations in F matrix 
+       update_open_loc();
    
    }
 
@@ -211,7 +272,7 @@ namespace FT{
        size_t i = 0;
        while (i < 2* individuals.size())
        {
-           if (not_in(current_locs,i))
+           if (!in(current_locs,i))
                new_open_locs.push_back(i);
            ++i;
        }
@@ -245,17 +306,18 @@ namespace FT{
        return output;
    }
 
-    vector<size_t> Population::sorted_front()
+    vector<size_t> Population::sorted_front(unsigned rank=1)
     {
         /* Returns individuals on the Pareto front, sorted by increasign complexity. */
         vector<size_t> pf;
         for (unsigned int i =0; i<individuals.size(); ++i)
         {
-            if (individuals[i].rank == 1)
+            if (individuals[i].rank == rank)
                 pf.push_back(i);
         }
         std::sort(pf.begin(),pf.end(),SortComplexity(*this)); 
-        //[](size_t i, size_t j){ return individuals[i].complexity < individuals[j].complexity;});
+        auto it = std::unique(pf.begin(),pf.end(),SameFitComplexity(*this));
+        pf.resize(std::distance(pf.begin(),it));
         return pf;
     }
     

@@ -10,30 +10,25 @@ namespace FT{
     ////////////////////////////////////////////////////////////////////////////////// Declarations
     /*!
      * @class Lexicase
+     * @brief Lexicase selection operator.
      */
     struct Lexicase : SelectionOperator
     {
-        /*!
-         * Lexicase selection operator.
-         */
-
-        Lexicase(bool surv){ survival = surv; }
+        Lexicase(bool surv){ name = "lexicase"; survival = surv; }
         
         ~Lexicase(){}
 
-        /*!
-         * select function returns a set of selected indices from F. 
-         */
-        vector<size_t> select(const MatrixXd& F, const Parameters& params, Rnd& r); 
+        /// function returns a set of selected indices from F. 
+        vector<size_t> select(Population& pop, const MatrixXd& F, const Parameters& params); 
         
         /// lexicase survival
-        vector<size_t> survive(const MatrixXd& F, const Parameters& params, Rnd& r); 
+        vector<size_t> survive(Population& pop, const MatrixXd& F, const Parameters& params); 
 
     };
     
     /////////////////////////////////////////////////////////////////////////////////// Definitions
     
-    vector<size_t> Lexicase::select(const MatrixXd& F, const Parameters& params, Rnd& r)
+    vector<size_t> Lexicase::select(Population& pop, const MatrixXd& F, const Parameters& params)
     {
         /* Selection according to lexicase selection for classification and epsilon-lexicase
          * selection for regression. 
@@ -51,7 +46,7 @@ namespace FT{
          */            
         
         if (survival)               // if survival is on, run lexicase survival.
-            return survive(F,params,r);
+            return survive(pop,F,params);
 
         unsigned int N = F.rows(); //< number of samples
         unsigned int P = F.cols()/2; //< number of individuals
@@ -67,30 +62,31 @@ namespace FT{
                 epsilon(i) = mad(F.row(i));
         }
 
-        // individual locations
-        vector<size_t> starting_pool(P);                    
-        iota(starting_pool.begin(), starting_pool.end(), 0);
+        // individual locations in F
+        vector<size_t> starting_pool;
+        for (const auto& p : pop.individuals) starting_pool.push_back(p.loc);
+        assert(starting_pool.size() == P);     
         
-        // cases 
-        vector<size_t> cases(N);
-        iota(cases.begin(),cases.end(),0);
-
-        vector<size_t> selected; // selected individuals
-//TODO:  #pragma omp parallel for
+        vector<size_t> F_locs(P,0); // selected individuals
+        
+        #pragma omp parallel for 
         for (unsigned int i = 0; i<P; ++i)  // selection loop
         {
+ 
+            vector<size_t> cases(N);                // cases
+            iota(cases.begin(),cases.end(),0);
             vector<size_t> pool = starting_pool;    // initial pool   
             vector<size_t> winner;                  // winners
             r.shuffle(cases.begin(),cases.end());   // shuffle cases
-            
+    
             bool pass = true;     // checks pool size and number of cases
             unsigned int h = 0;   // case count
-            
+
             while(pass){    // main loop
 
               winner.resize(0);   // winners                  
               double minfit = std::numeric_limits<double>::max();   // minimum error on case
-                       
+            
               for (size_t j = 0; j<pool.size(); ++j)
               {
                   if (F(cases[h],pool[j]) < minfit+epsilon[cases[h]])
@@ -107,16 +103,43 @@ namespace FT{
               pass = (winner.size()>1 && h<cases.size()); // only keep going if needed
               pool = winner;    // reduce pool to remaining individuals
           
-            }
+            }       
+
             assert(winner.size()>0);
             //if more than one winner, pick randomly
-            selected.push_back(r.random_choice(winner));                            
+            F_locs[i] = r.random_choice(winner);                            
         }               
 
+        // convert F_locs to pop.individuals indices
+        vector<size_t> selected;
+        bool match = false;
+        for (const auto& f: F_locs)
+        {
+            for (unsigned i=0; i < pop.size(); ++i)
+            {
+                if (pop.individuals[i].loc == f)
+                {
+                    selected.push_back(i);
+                    match = true;
+                }
+            }
+            if (!match)
+                std::cout << "no loc matching " << f << " in pop\n";
+            match = false;
+        }
+        if (selected.size() != F_locs.size()){
+            std::cout << "pop.locs: ";
+            for (auto i: pop.individuals) std::cout << i.loc << " "; std::cout << "\n";
+            std::cout << "selected: " ;
+            for (auto s: selected) std::cout << s << " "; std::cout << "\n";
+            std::cout<< "F_locs: ";
+            for (auto f: F_locs) std::cout << f << " "; std::cout << "\n";
+        }
+        assert(selected.size() == F_locs.size());
         return selected;
     }
 
-    vector<size_t> Lexicase::survive(const MatrixXd& F, const Parameters& params, Rnd& r)
+    vector<size_t> Lexicase::survive(Population& pop, const MatrixXd& F, const Parameters& params)
     {
         /* Lexicase survival */
     }
