@@ -15,7 +15,7 @@ find_package(Eigen3 REQUIRED NO_MODULE)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
 # add Shogun includes
-find_package(Shogun REQUIRED NO_MODULE)
+#find_package(Shogun REQUIRED NO_MODULE)
 # find Shogun library
 #find_library(Shogun REQUIRED NO_MODULE)
 
@@ -42,4 +42,4 @@ file(GLOB src_files "src/*.cc")
 # executable
 add_executable(fewtwo ${src_files})
 
-target_link_libraries(fewtwo shogun)
+#target_link_libraries(fewtwo shogun)

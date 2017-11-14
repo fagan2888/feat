@@ -6,14 +6,14 @@ license: GNU/GPL v3
 #define ML_H
 
 //external includes
-#include <shogun/base/init.h>
-#include <shogun/base/Parallel.h>
-#include <shogun/machine/Machine.h>
-#include <shogun/machine/LinearMachine.h>
-#include <shogun/regression/LeastAngleRegression.h>
-#include <shogun/regression/LinearRidgeRegression.h>
-#include <shogun/multiclass/tree/CARTree.h>
-#include <shogun/machine/RandomForest.h>
+#include <ml/shogun/base/init.h>
+#include <ml/shogun/base/Parallel.h>
+#include <ml/shogun/machine/Machine.h>
+#include <ml/shogun/machine/LinearMachine.h>
+#include <ml/shogun/regression/LeastAngleRegression.h>
+#include <ml/shogun/regression/LinearRidgeRegression.h>
+#include <ml/shogun/multiclass/tree/CARTree.h>
+#include <ml/shogun/machine/RandomForest.h>
 
 // stuff being used
 using std::string;
