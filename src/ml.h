@@ -7,13 +7,12 @@ license: GNU/GPL v3
 
 //external includes
 #include <ml/shogun/base/init.h>
-#include <ml/shogun/base/Parallel.h>
 #include <ml/shogun/machine/Machine.h>
 #include <ml/shogun/machine/LinearMachine.h>
 #include <ml/shogun/regression/LeastAngleRegression.h>
 #include <ml/shogun/regression/LinearRidgeRegression.h>
 #include <ml/shogun/multiclass/tree/CARTree.h>
-#include <ml/shogun/machine/RandomForest.h>
+//#include <ml/shogun/machine/RandomForest.h>
 
 // stuff being used
 using std::string;
@@ -48,11 +47,11 @@ namespace FT{
                 if (!ml.compare("LeastAngleRegression"))
                     p_est = make_shared<sh::CLeastAngleRegression>();
                 
-                else if (!ml.compare("RandomForest")){
-                    p_est = make_shared<sh::CRandomForest>();
-                    dynamic_pointer_cast<sh::CRandomForest>(p_est)->
-                                                               set_machine_problem_type(prob_type);
-                }
+               // else if (!ml.compare("RandomForest")){
+               //     p_est = make_shared<sh::CRandomForest>();
+               //     dynamic_pointer_cast<sh::CRandomForest>(p_est)->
+               //                                                set_machine_problem_type(prob_type);
+               // }
                 else if (!ml.compare("CART")){
                     p_est = make_shared<sh::CCARTree>();
                     dynamic_pointer_cast<sh::CCARTree>(p_est)->set_machine_problem_type(prob_type);
