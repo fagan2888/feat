@@ -623,7 +623,7 @@ namespace shogun
 		}
 
 		/**
-		 * Compute the top-k eigenvalues and eigenvectors of a symmetric matrix.
+		 * Compute the eigenvalues and eigenvectors of a symmetric matrix.
 		 *
 		 * User should pass an appropriately pre-allocated memory vector
 		 * to store the eigenvalues and an appropriately pre-allocated memory
@@ -631,45 +631,33 @@ namespace shogun
 		 *
 		 * @param A The matrix whose eigenvalues and eigenvectors are to be
 		 * computed
-		 * @param eigenvalues Eigenvalues result vector in ascending order
+		 * @param eigenvalues Eigenvalues result vector
 		 * @param eigenvectors Eigenvectors result matrix
-		 * @param k number of top eigenvalues to be computed
-		 * [default = 0: all eigenvalues]
 		 */
 		template <typename T>
 		void eigen_solver_symmetric(
 		    const SGMatrix<T>& A, SGVector<T>& eigenvalues,
-		    SGMatrix<T>& eigenvectors, index_t k = 0)
+		    SGMatrix<T>& eigenvectors)
 		{
-
 			REQUIRE(
 			    A.num_rows == A.num_cols, "Matrix A (%d x% d) is not square!\n",
 			    A.num_rows, A.num_cols);
-
-			if (k == 0)
-				k = A.num_rows;
-			REQUIRE(
-			    k > 0 && k <= A.num_rows,
-			    "Invalid value of k (%d), it must be in the range 1-%d.", k,
-			    A.num_rows)
-
 			REQUIRE(
 			    A.num_rows == eigenvectors.num_rows,
 			    "Number of rows of A (%d) doesn't match eigenvectors' matrix "
 			    "(%d).\n",
 			    A.num_rows, eigenvectors.num_rows);
 			REQUIRE(
-			    k == eigenvectors.num_cols, "Number of requested eigenvectors "
-			                                "(%d) doesn't match the number "
-			                                "of result matrix columns (%d).\n",
-			    k, eigenvectors.num_cols);
+			    A.num_cols == eigenvectors.num_cols,
+			    "Number of columns of A (%d) doesn't match eigenvectors' "
+			    "matrix (%d).\n",
+			    A.num_cols, eigenvectors.num_cols);
 			REQUIRE(
-			    k == eigenvalues.vlen, "Length of result vector doesn't "
-			                           "match the number of requested "
-			                           "eigenvalues");
+			    A.num_cols == eigenvalues.vlen,
+			    "Length of eigenvalues' vector doesn't match matrix A");
 
 			infer_backend(A)->eigen_solver_symmetric(
-			    A, eigenvalues, eigenvectors, k);
+			    A, eigenvalues, eigenvectors);
 		}
 
 		/** Performs the operation C = A .* B where ".*" denotes elementwise
@@ -796,34 +784,16 @@ namespace shogun
 			return result;
 		}
 
-		/** Performs the operation B = exp(A)
-		 *
-		 * This version returns the result in a newly created vector or matrix.
-		 *
-		 * @param a Exponent vector or matrix
-		 * @return The result of the operation
-		 */
-		template <typename T, template <typename> class Container>
-		Container<T> exponent(const Container<T>& a)
-		{
-			Container<T> result;
-			result = a.clone();
-
-			infer_backend(a)->exponent(a, result);
-
-			return result;
-		}
-
 		/**
 		 * Method that writes the identity into a square matrix.
 		 *
 		 * @param a The square matrix to be set
 		 */
 		template <typename T>
-		void identity(SGMatrix<T>& identity_matrix)
+		void identity(SGMatrix<T>& I)
 		{
-			REQUIRE(identity_matrix.num_rows == identity_matrix.num_cols, "Matrix is not square!\n");
-			infer_backend(identity_matrix)->identity(identity_matrix);
+			REQUIRE(I.num_rows == I.num_cols, "Matrix is not square!\n");
+			infer_backend(I)->identity(I);
 		}
 
 		/** Performs the operation of a matrix multiplies a vector \f$x = Ab\f$.

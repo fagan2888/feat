@@ -144,15 +144,6 @@ template<class T> class SGMatrix : public SGReferencedData
 			return &matrix[c*num_rows];
 		}
 
-		/** Given a range of columns (start, end), return a view
-		 * of the matrix from column start to end excluded.
-		 * \warning The returned SGMatrix is non-owning!
-		 * @param col_start column index (inclusive)
-		 * @param col_end column index (excluded)
-		 * @return the submatrix
-		 */
-		SGMatrix<T> submatrix(index_t col_start, index_t col_end) const;
-
 		/** Map a column to a SGVector
 		 * \warning The returned SGVector is non-owning!
 		 * @param col column index
@@ -262,9 +253,9 @@ template<class T> class SGMatrix : public SGReferencedData
 		}
 
 		/** The size */
-		inline int64_t size() const
+		inline uint64_t size() const
 		{
-			const int64_t c=num_cols;
+			const uint64_t c=num_cols;
 			return num_rows*c;
 		}
 
