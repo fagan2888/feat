@@ -6,14 +6,14 @@ license: GNU/GPL v3
 #define EVALUATION_H
 
 // external includes
-#include <shogun/machine/Machine.h>
+//#include <shogun/machine/Machine.h>
 #include <shogun/base/some.h>                                                                       
-#include <shogun/base/init.h>                                                                       
-#include <shogun/lib/common.h>                                                                      
-#include <shogun/labels/RegressionLabels.h>                                                         
-#include <shogun/features/Features.h>                                                               
+//#include <shogun/base/init.h>                                                                       
+//#include <shogun/lib/common.h>                                                                      
+//#include <shogun/labels/RegressionLabels.h>                                                         
+//#include <shogun/features/Features.h>                                                               
 //#include <shogun/preprocessor/PruneVarSubMean.h>        
-#include <shogun/preprocessor/NormOne.h>        
+//#include <shogun/preprocessor/NormOne.h>        
 #include <cmath>
 // internal includes
 #include "ml.h"
@@ -145,7 +145,6 @@ namespace FT{
 
         auto features = some<CDenseFeatures<float64_t>>(SGMatrix<float64_t>(X));
         auto labels = some<CRegressionLabels>(SGVector<float64_t>(y));
-         
         // pass data to ml
         ml->p_est->set_labels(labels);
 
