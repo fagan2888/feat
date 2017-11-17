@@ -11,12 +11,12 @@
 #ifndef _CACHE_H__
 #define _CACHE_H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/lib/common.h"
-#include "ml/shogun/io/SGIO.h"
-#include "ml/shogun/mathematics/Math.h"
-#include "ml/shogun/base/SGObject.h"
+#include "../../shogun/lib/common.h"
+#include "../../shogun/io/SGIO.h"
+#include "../../shogun/mathematics/Math.h"
+#include "../../shogun/base/SGObject.h"
 
 #include <stdlib.h>
 

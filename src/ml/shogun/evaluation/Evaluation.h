@@ -11,13 +11,13 @@
 #ifndef EVALUATION_H_
 #define EVALUATION_H_
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/labels/Labels.h"
-#include "ml/shogun/base/SGObject.h"
+#include "../../shogun/labels/Labels.h"
+#include "../../shogun/base/SGObject.h"
 
-#include "ml/shogun/lib/SGVector.h"
-#include "ml/shogun/lib/SGMatrix.h"
+#include "../../shogun/lib/SGVector.h"
+#include "../../shogun/lib/SGMatrix.h"
 
 namespace shogun
 {

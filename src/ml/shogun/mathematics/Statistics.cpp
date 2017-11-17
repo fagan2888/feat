@@ -12,14 +12,14 @@
  * https://people.sc.fsu.edu/~jburkardt/f_src/cdflib/cdflib.html
  */
 
-#include "ml/shogun/mathematics/Statistics.h"
-#include "ml/shogun/mathematics/Math.h"
-#include "ml/shogun/lib/SGMatrix.h"
-#include "ml/shogun/lib/SGVector.h"
-#include "ml/shogun/lib/SGSparseMatrix.h"
-#include "ml/shogun/lib/SGSparseVector.h"
-#include "ml/shogun/lib/external/cdflib.hpp"
-#include "ml/shogun/mathematics/eigen3.h"
+#include "../../shogun/mathematics/Statistics.h"
+#include "../../shogun/mathematics/Math.h"
+#include "../../shogun/lib/SGMatrix.h"
+#include "../../shogun/lib/SGVector.h"
+#include "../../shogun/lib/SGSparseMatrix.h"
+#include "../../shogun/lib/SGSparseVector.h"
+#include "../../shogun/lib/external/cdflib.hpp"
+#include "../../shogun/mathematics/eigen3.h"
 
 using namespace Eigen;
 

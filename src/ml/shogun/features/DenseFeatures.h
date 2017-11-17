@@ -15,19 +15,19 @@
 #ifndef _DENSEFEATURES__H__
 #define _DENSEFEATURES__H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/lib/common.h"
-#include "ml/shogun/lib/Cache.h"
-#include "ml/shogun/io/File.h"
-#include "ml/shogun/features/DotFeatures.h"
-#include "ml/shogun/features/StringFeatures.h"
-#include "ml/shogun/lib/DataType.h"
+#include "../../shogun/lib/common.h"
+#include "../../shogun/lib/Cache.h"
+#include "../../shogun/io/File.h"
+#include "../../shogun/features/DotFeatures.h"
+// removed StringFeatures.h include
+#include "../../shogun/lib/DataType.h"
 
-#include "ml/shogun/lib/SGMatrix.h"
+#include "../../shogun/lib/SGMatrix.h"
 
 namespace shogun {
-template<class ST> class CStringFeatures;
+//template<class ST> class CStringFeatures;
 template<class ST> class CDenseFeatures;
 template<class ST> class SGMatrix;
 class CDotFeatures;

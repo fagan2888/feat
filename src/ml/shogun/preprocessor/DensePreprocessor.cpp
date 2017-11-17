@@ -1,4 +1,4 @@
-#include "ml/shogun/preprocessor/DensePreprocessor.h"
+#include "../../shogun/preprocessor/DensePreprocessor.h"
 
 namespace shogun
 {

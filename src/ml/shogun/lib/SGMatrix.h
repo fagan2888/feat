@@ -13,10 +13,10 @@
 #ifndef __SGMATRIX_H__
 #define __SGMATRIX_H__
 
-#include "ml/shogun/io/SGIO.h"
-#include "ml/shogun/lib/config.h"
-#include "ml/shogun/lib/common.h"
-#include "ml/shogun/lib/SGReferencedData.h"
+#include "../../shogun/io/SGIO.h"
+#include "../../shogun/lib/config.h"
+#include "../../shogun/lib/common.h"
+#include "../../shogun/lib/SGReferencedData.h"
 
 #include <memory>
 #include <atomic>
@@ -144,6 +144,15 @@ template<class T> class SGMatrix : public SGReferencedData
 			return &matrix[c*num_rows];
 		}
 
+		/** Given a range of columns (start, end), return a view
+		 * of the matrix from column start to end excluded.
+		 * \warning The returned SGMatrix is non-owning!
+		 * @param col_start column index (inclusive)
+		 * @param col_end column index (excluded)
+		 * @return the submatrix
+		 */
+		SGMatrix<T> submatrix(index_t col_start, index_t col_end) const;
+
 		/** Map a column to a SGVector
 		 * \warning The returned SGVector is non-owning!
 		 * @param col column index
@@ -253,9 +262,9 @@ template<class T> class SGMatrix : public SGReferencedData
 		}
 
 		/** The size */
-		inline uint64_t size() const
+		inline int64_t size() const
 		{
-			const uint64_t c=num_cols;
+			const int64_t c=num_cols;
 			return num_rows*c;
 		}
 

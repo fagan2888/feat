@@ -32,7 +32,7 @@
 #ifndef CARTREENODEDATA_H__
 #define CARTREENODEDATA_H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../../shogun/lib/config.h"
 
 namespace shogun
 {

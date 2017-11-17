@@ -11,11 +11,11 @@
 #ifndef __LATENTLABELS_H__
 #define __LATENTLABELS_H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/labels/Labels.h"
-#include "ml/shogun/lib/Data.h"
-#include "ml/shogun/lib/DynamicObjectArray.h"
+#include "../../shogun/labels/Labels.h"
+#include "../../shogun/lib/Data.h"
+#include "../../shogun/lib/DynamicObjectArray.h"
 
 namespace shogun
 {

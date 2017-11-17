@@ -32,10 +32,10 @@
 #ifndef HASH_H
 #define HASH_H
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/base/SGObject.h"
-#include "ml/shogun/lib/common.h"
+#include "../../shogun/base/SGObject.h"
+#include "../../shogun/lib/common.h"
 
 namespace shogun
 {

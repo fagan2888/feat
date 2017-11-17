@@ -9,8 +9,8 @@
  * Copyright (C) 2010 Berlin Institute of Technology
  */
 
-#include "ml/shogun/io/SerializableFile.h"
-#include "ml/shogun/io/SGIO.h"
+#include "../../shogun/io/SerializableFile.h"
+#include "../../shogun/io/SGIO.h"
 
 using namespace shogun;
 

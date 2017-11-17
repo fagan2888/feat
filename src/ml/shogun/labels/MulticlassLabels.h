@@ -13,14 +13,14 @@
 #ifndef _MULTICLASS_LABELS__H__
 #define _MULTICLASS_LABELS__H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/lib/common.h"
-#include "ml/shogun/io/File.h"
-#include "ml/shogun/labels/LabelTypes.h"
-#include "ml/shogun/labels/DenseLabels.h"
-#include "ml/shogun/features/SubsetStack.h"
-#include "ml/shogun/lib/SGMatrix.h"
+#include "../../shogun/lib/common.h"
+#include "../../shogun/io/File.h"
+#include "../../shogun/labels/LabelTypes.h"
+#include "../../shogun/labels/DenseLabels.h"
+#include "../../shogun/features/SubsetStack.h"
+#include "../../shogun/lib/SGMatrix.h"
 
 namespace shogun
 {
@@ -50,6 +50,7 @@ class CMulticlassLabels : public CDenseLabels
 		 * @param src labels to set
 		 */
 		CMulticlassLabels(SGVector<float64_t> src);
+
 
 		/** constructor
 		 *
@@ -134,6 +135,12 @@ class CMulticlassLabels : public CDenseLabels
 #ifndef SWIG // SWIG should skip this part
 		virtual CLabels* shallow_subset_copy();
 #endif
+		/**
+		 * Cast a generic label object to a multiclass one
+		 * @param labels generic CLabels instance
+		 * @return the casted pointer (already SG_REF'ed)
+		 */
+		static CMulticlassLabels* obtain_from_generic(CLabels* labels);
 
 	private:
 		/** initialises and register parameters */

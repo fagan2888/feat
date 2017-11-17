@@ -8,7 +8,7 @@
  * Copyright (C) 2013 Viktor Gal
  */
 
-#include "ml/shogun/ensemble/CombinationRule.h"
+#include "../../shogun/ensemble/CombinationRule.h"
 
 using namespace shogun;
 

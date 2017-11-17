@@ -1,5 +1,0 @@
-shogun/base/some.h
-shogun/regression/LeastAngleRegression.h
-shogun/regression/LinearRidgeRegression.h
-shogun/multiclass/tree/CARTree.h
-shogun/machine/RandomForest.h

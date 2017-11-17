@@ -39,7 +39,7 @@
 extern "C" {
 #endif
 
-#include "ml/shogun/lib/config.h"
+#include "../../../../shogun/lib/config.h"
 
 #include <stdio.h>
 #include <assert.h>

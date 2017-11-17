@@ -31,7 +31,7 @@
 #ifndef __CPU_INFO_H__
 #define __CPU_INFO_H__
 
-#include "ml/shogun/lib/common.h"
+#include "../../shogun/lib/common.h"
 
 SG_FORCED_INLINE static void CpuRelax()
 {

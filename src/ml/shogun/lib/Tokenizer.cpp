@@ -1,5 +1,5 @@
-#include "ml/shogun/lib/Tokenizer.h"
-#include "ml/shogun/base/Parameter.h"
+#include "../../shogun/lib/Tokenizer.h"
+#include "../../shogun/base/Parameter.h"
 
 namespace shogun
 {

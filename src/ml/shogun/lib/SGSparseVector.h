@@ -14,10 +14,10 @@
 #ifndef __SGSPARSEVECTOR_H__
 #define __SGSPARSEVECTOR_H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/lib/SGReferencedData.h"
-#include "ml/shogun/lib/SGVector.h"
+#include "../../shogun/lib/SGReferencedData.h"
+#include "../../shogun/lib/SGVector.h"
 
 namespace shogun
 {

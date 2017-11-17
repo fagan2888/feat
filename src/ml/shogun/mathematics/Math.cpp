@@ -8,10 +8,10 @@
  * Written (W) 1999-2008 Gunnar Raetsch
  * Copyright (C) 1999-2009 Fraunhofer Institute FIRST and Max-Planck-Society
  */
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/mathematics/Math.h"
-#include "ml/shogun/mathematics/eigen3.h"
+#include "../../shogun/mathematics/Math.h"
+#include "../../shogun/mathematics/eigen3.h"
 
 #include <stdlib.h>
 
@@ -79,24 +79,6 @@ CMath::~CMath()
 	SG_FREE(CMath::logtable);
 	CMath::logtable=NULL;
 #endif
-}
-
-float64_t CMath::dot(const float64_t* v1, const float64_t* v2, int32_t n)
-{
-	float64_t r=0;
-	Eigen::Map<const Eigen::VectorXd> ev1(v1,n);
-	Eigen::Map<const Eigen::VectorXd> ev2(v2,n);
-	r = ev1.dot(ev2);
-	return r;
-}
-
-float32_t CMath::dot(const float32_t* v1, const float32_t* v2, int32_t n)
-{
-	float32_t r=0;
-	Eigen::Map<const Eigen::VectorXf> ev1(v1,n);
-	Eigen::Map<const Eigen::VectorXf> ev2(v2,n);
-	r = ev1.dot(ev2);
-	return r;
 }
 
 #ifdef USE_LOGCACHE

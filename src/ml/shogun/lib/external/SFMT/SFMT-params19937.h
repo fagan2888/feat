@@ -2,7 +2,7 @@
 #ifndef SFMT_PARAMS19937_H
 #define SFMT_PARAMS19937_H
 
-#include "ml/shogun/lib/config.h"
+#include "../../../../shogun/lib/config.h"
 
 #define SFMT_POS1	122
 #define SFMT_SL1	18

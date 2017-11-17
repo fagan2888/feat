@@ -33,14 +33,14 @@
 #ifndef SG_LINALG_H__
 #define SG_LINALG_H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../../shogun/lib/config.h"
 
-#include "ml/shogun/lib/Lock.h"
-#include "ml/shogun/lib/common.h"
-#include "ml/shogun/lib/memory.h"
+#include "../../../shogun/lib/Lock.h"
+#include "../../../shogun/lib/common.h"
+#include "../../../shogun/lib/memory.h"
 
-#include "ml/shogun/mathematics/linalg/LinalgBackendBase.h"
-#include "ml/shogun/mathematics/linalg/LinalgBackendEigen.h"
+#include "../../../shogun/mathematics/linalg/LinalgBackendBase.h"
+#include "../../../shogun/mathematics/linalg/LinalgBackendEigen.h"
 
 #include <memory>
 

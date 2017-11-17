@@ -11,11 +11,11 @@
 #ifndef LEASTANGLEREGRESSION_H__
 #define LEASTANGLEREGRESSION_H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
 #include <vector>
-#include "ml/shogun/machine/LinearMachine.h"
-#include "ml/shogun/features/DenseFeatures.h"
+#include "../../shogun/machine/LinearMachine.h"
+#include "../../shogun/features/DenseFeatures.h"
 
 namespace shogun
 {

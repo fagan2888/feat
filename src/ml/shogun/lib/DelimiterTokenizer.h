@@ -11,11 +11,11 @@
 #ifndef _DELIMITERTOKENIZER__H__
 #define	_DELIMITERTOKENIZER__H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/lib/Tokenizer.h"
-#include "ml/shogun/lib/SGVector.h"
-#include "ml/shogun/lib/common.h"
+#include "../../shogun/lib/Tokenizer.h"
+#include "../../shogun/lib/SGVector.h"
+#include "../../shogun/lib/common.h"
 
 namespace shogun
 {

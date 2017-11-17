@@ -8,11 +8,11 @@
  * Copyright (C) 1999-2009 Fraunhofer Institute FIRST and Max-Planck-Society
  */
 
-#include "ml/shogun/machine/LinearMachine.h"
-#include "ml/shogun/labels/RegressionLabels.h"
-#include "ml/shogun/features/DotFeatures.h"
-#include "ml/shogun/labels/Labels.h"
-#include "ml/shogun/mathematics/eigen3.h"
+#include "../../shogun/machine/LinearMachine.h"
+#include "../../shogun/labels/RegressionLabels.h"
+#include "../../shogun/features/DotFeatures.h"
+#include "../../shogun/labels/Labels.h"
+#include "../../shogun/mathematics/eigen3.h"
 
 using namespace shogun;
 using namespace Eigen;

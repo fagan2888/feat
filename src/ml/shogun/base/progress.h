@@ -41,12 +41,12 @@
 #include <memory>
 #include <string>
 
-#include "ml/shogun/base/init.h"
-#include "ml/shogun/base/range.h"
-#include "ml/shogun/io/SGIO.h"
-#include "ml/shogun/lib/Lock.h"
-#include "ml/shogun/lib/Time.h"
-#include "ml/shogun/mathematics/Math.h"
+#include "../../shogun/base/init.h"
+#include "../../shogun/base/range.h"
+#include "../../shogun/io/SGIO.h"
+#include "../../shogun/lib/Lock.h"
+#include "../../shogun/lib/Time.h"
+#include "../../shogun/mathematics/Math.h"
 
 #ifdef WIN32
 #include <windows.h>

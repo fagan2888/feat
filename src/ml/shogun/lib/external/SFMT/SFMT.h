@@ -39,7 +39,7 @@
 extern "C" {
 #endif
 
-#include "ml/shogun/lib/config.h"
+#include "../../../../shogun/lib/config.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -67,7 +67,7 @@ extern "C" {
   #endif
 #endif
 
-#include "ml/shogun/lib/external/SFMT/SFMT-params.h"
+#include "../../../../shogun/lib/external/SFMT/SFMT-params.h"
 
 /*------------------------------------------
   128-bit SIMD like data type for standard C

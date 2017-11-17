@@ -8,15 +8,15 @@
  * Written (W) 2013 Evgeniy Andreev (gsomix)
  */
 
-#include "ml/shogun/io/LibSVMFile.h"
+#include "../../shogun/io/LibSVMFile.h"
 
-#include "ml/shogun/base/DynArray.h"
-#include "ml/shogun/base/progress.h"
-#include "ml/shogun/io/LineReader.h"
-#include "ml/shogun/io/Parser.h"
-#include "ml/shogun/lib/DelimiterTokenizer.h"
-#include "ml/shogun/lib/SGSparseVector.h"
-#include "ml/shogun/lib/SGVector.h"
+#include "../../shogun/base/DynArray.h"
+#include "../../shogun/base/progress.h"
+#include "../../shogun/io/LineReader.h"
+#include "../../shogun/io/Parser.h"
+#include "../../shogun/lib/DelimiterTokenizer.h"
+#include "../../shogun/lib/SGSparseVector.h"
+#include "../../shogun/lib/SGVector.h"
 
 using namespace shogun;
 

@@ -12,17 +12,17 @@
 #ifndef _MAP_H_
 #define _MAP_H_
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/base/SGObject.h"
-#include "ml/shogun/lib/common.h"
-#include "ml/shogun/lib/Hash.h"
-#include "ml/shogun/base/DynArray.h"
+#include "../../shogun/base/SGObject.h"
+#include "../../shogun/lib/common.h"
+#include "../../shogun/lib/Hash.h"
+#include "../../shogun/base/DynArray.h"
 
 #include <cstdio>
 
-#include "ml/shogun/io/SGIO.h"
-#include "ml/shogun/lib/Lock.h"
+#include "../../shogun/io/SGIO.h"
+#include "../../shogun/lib/Lock.h"
 
 
 namespace shogun

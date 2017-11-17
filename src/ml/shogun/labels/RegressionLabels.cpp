@@ -1,5 +1,5 @@
-#include "ml/shogun/labels/DenseLabels.h"
-#include "ml/shogun/labels/RegressionLabels.h"
+#include "../../shogun/labels/DenseLabels.h"
+#include "../../shogun/labels/RegressionLabels.h"
 
 using namespace shogun;
 

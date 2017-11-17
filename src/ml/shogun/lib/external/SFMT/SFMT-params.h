@@ -2,7 +2,7 @@
 #ifndef SFMT_PARAMS_H
 #define SFMT_PARAMS_H
 
-#include "ml/shogun/lib/config.h"
+#include "../../../../shogun/lib/config.h"
 
 #if !defined(SFMT_MEXP)
 #if defined(__GNUC__) && !defined(__ICC)
@@ -68,25 +68,25 @@
 */
 
 #if SFMT_MEXP == 607
-  #include "ml/shogun/lib/external/SFMT/SFMT-params607.h"
+  #include "../../../../shogun/lib/external/SFMT/SFMT-params607.h"
 #elif SFMT_MEXP == 1279
-  #include "ml/shogun/lib/external/SFMT/SFMT-params1279.h"
+  #include "../../../../shogun/lib/external/SFMT/SFMT-params1279.h"
 #elif SFMT_MEXP == 2281
-  #include "ml/shogun/lib/external/SFMT/SFMT-params2281.h"
+  #include "../../../../shogun/lib/external/SFMT/SFMT-params2281.h"
 #elif SFMT_MEXP == 4253
-  #include "ml/shogun/lib/external/SFMT/SFMT-params4253.h"
+  #include "../../../../shogun/lib/external/SFMT/SFMT-params4253.h"
 #elif SFMT_MEXP == 11213
-  #include "ml/shogun/lib/external/SFMT/SFMT-params11213.h"
+  #include "../../../../shogun/lib/external/SFMT/SFMT-params11213.h"
 #elif SFMT_MEXP == 19937
-  #include "ml/shogun/lib/external/SFMT/SFMT-params19937.h"
+  #include "../../../../shogun/lib/external/SFMT/SFMT-params19937.h"
 #elif SFMT_MEXP == 44497
-  #include "ml/shogun/lib/external/SFMT/SFMT-params44497.h"
+  #include "../../../../shogun/lib/external/SFMT/SFMT-params44497.h"
 #elif SFMT_MEXP == 86243
-  #include "ml/shogun/lib/external/SFMT/SFMT-params86243.h"
+  #include "../../../../shogun/lib/external/SFMT/SFMT-params86243.h"
 #elif SFMT_MEXP == 132049
-  #include "ml/shogun/lib/external/SFMT/SFMT-params132049.h"
+  #include "../../../../shogun/lib/external/SFMT/SFMT-params132049.h"
 #elif SFMT_MEXP == 216091
-  #include "ml/shogun/lib/external/SFMT/SFMT-params216091.h"
+  #include "../../../../shogun/lib/external/SFMT/SFMT-params216091.h"
 #else
 #if defined(__GNUC__) && !defined(__ICC)
   #error "SFMT_MEXP is not valid."

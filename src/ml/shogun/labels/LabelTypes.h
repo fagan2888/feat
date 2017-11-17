@@ -9,7 +9,7 @@
 #ifndef _LABEL_TYPES__H__
 #define _LABEL_TYPES__H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
 
 enum ELabelType

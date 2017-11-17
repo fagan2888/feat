@@ -13,18 +13,18 @@
 #ifndef _CFEATURES__H__
 #define _CFEATURES__H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/lib/common.h"
-#include "ml/shogun/io/File.h"
-#include "ml/shogun/base/SGObject.h"
-#include "ml/shogun/preprocessor/Preprocessor.h"
-#include "ml/shogun/features/FeatureTypes.h"
-#include "ml/shogun/features/SubsetStack.h"
-#include "ml/shogun/lib/List.h"
-#include "ml/shogun/lib/DynamicObjectArray.h"
-#include "ml/shogun/lib/DynamicArray.h"
-#include "ml/shogun/base/range.h"
+#include "../../shogun/lib/common.h"
+#include "../../shogun/io/File.h"
+#include "../../shogun/base/SGObject.h"
+#include "../../shogun/preprocessor/Preprocessor.h"
+#include "../../shogun/features/FeatureTypes.h"
+#include "../../shogun/features/SubsetStack.h"
+#include "../../shogun/lib/List.h"
+#include "../../shogun/lib/DynamicObjectArray.h"
+#include "../../shogun/lib/DynamicArray.h"
+#include "../../shogun/base/range.h"
 
 namespace shogun
 {

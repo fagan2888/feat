@@ -11,7 +11,7 @@
 #ifndef _SHOGUN_EXCEPTION_H_
 #define _SHOGUN_EXCEPTION_H_
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
 namespace shogun
 {

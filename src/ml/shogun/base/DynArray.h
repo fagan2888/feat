@@ -12,10 +12,10 @@
 #ifndef _DYNARRAY_H_
 #define _DYNARRAY_H_
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/lib/common.h"
-#include "ml/shogun/mathematics/Math.h"
+#include "../../shogun/lib/common.h"
+#include "../../shogun/mathematics/Math.h"
 
 namespace shogun
 {

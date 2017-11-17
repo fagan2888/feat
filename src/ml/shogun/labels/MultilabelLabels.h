@@ -32,13 +32,13 @@
 #ifndef _MULTILABEL_LABELS__H__
 #define _MULTILABEL_LABELS__H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/lib/common.h"
-#include "ml/shogun/labels/LabelTypes.h"
-#include "ml/shogun/labels/Labels.h"
-#include "ml/shogun/lib/SGVector.h"
-#include "ml/shogun/lib/SGMatrix.h"
+#include "../../shogun/lib/common.h"
+#include "../../shogun/labels/LabelTypes.h"
+#include "../../shogun/labels/Labels.h"
+#include "../../shogun/lib/SGVector.h"
+#include "../../shogun/lib/SGMatrix.h"
 
 namespace shogun
 {

@@ -11,9 +11,9 @@
 #ifndef _COMBINATION_RULE_H_
 #define _COMBINATION_RULE_H_
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/base/SGObject.h"
+#include "../../shogun/base/SGObject.h"
 
 namespace shogun
 {

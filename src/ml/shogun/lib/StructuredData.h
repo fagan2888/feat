@@ -11,10 +11,10 @@
 #ifndef _STRUCTUREDDATA_H__
 #define _STRUCTUREDDATA_H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/base/SGObject.h"
-#include "ml/shogun/lib/StructuredDataTypes.h"
+#include "../../shogun/base/SGObject.h"
+#include "../../shogun/lib/StructuredDataTypes.h"
 
 namespace shogun
 {

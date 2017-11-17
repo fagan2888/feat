@@ -1,12 +1,12 @@
-#include "ml/shogun/labels/LabelsFactory.h"
+#include "../../shogun/labels/LabelsFactory.h"
 
-#include "ml/shogun/labels/BinaryLabels.h"
-#include "ml/shogun/labels/LatentLabels.h"
-#include "ml/shogun/labels/MulticlassLabels.h"
-#include "ml/shogun/labels/RegressionLabels.h"
-#include "ml/shogun/labels/StructuredLabels.h"
-#include "ml/shogun/labels/MultilabelLabels.h"
-#include "ml/shogun/structure/MulticlassSOLabels.h"
+#include "../../shogun/labels/BinaryLabels.h"
+#include "../../shogun/labels/LatentLabels.h"
+#include "../../shogun/labels/MulticlassLabels.h"
+#include "../../shogun/labels/RegressionLabels.h"
+#include "../../shogun/labels/StructuredLabels.h"
+#include "../../shogun/labels/MultilabelLabels.h"
+#include "../../shogun/structure/MulticlassSOLabels.h"
 
 using namespace shogun;
 

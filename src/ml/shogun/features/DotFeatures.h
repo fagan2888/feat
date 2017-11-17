@@ -12,11 +12,11 @@
 #ifndef _DOTFEATURES_H___
 #define _DOTFEATURES_H___
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/lib/common.h"
-#include "ml/shogun/features/Features.h"
-#include "ml/shogun/lib/SGMatrix.h"
+#include "../../shogun/lib/common.h"
+#include "../../shogun/features/Features.h"
+#include "../../shogun/lib/SGMatrix.h"
 
 namespace shogun
 {
@@ -213,19 +213,31 @@ class CDotFeatures : public CFeatures
 		 *
 		 * @return mean returned
 		 */
-		static SGVector<float64_t> get_mean(CDotFeatures* lhs, CDotFeatures* rhs);
+		static SGVector<float64_t>
+		compute_mean(CDotFeatures* lhs, CDotFeatures* rhs);
 
 		/** get covariance
 		 *
+		 * @param copy_data_for_speed if true, the method stores explicitly
+		 * the centered data matrix and the covariance is calculated by matrix
+		 * product of the centered data with its transpose, this make it
+		 * possible to take advantage of multithreaded matrix product,
+		 * this may not be possible if the data doesn't fit into memory,
+		 * in such case set this parameter to false to compute iteratively
+		 * the covariance matrix without storing the centered data.
+		 * [default = true]
 		 * @return covariance
 		 */
-		virtual SGMatrix<float64_t> get_cov();
+		virtual SGMatrix<float64_t> get_cov(bool copy_data_for_speed = true);
 
 		/** compute the covariance of two CDotFeatures together
 		 *
+		 * @param copy_data_for_speed @see CDotFeatures::get_cov
 		 * @return covariance
 		 */
-		static SGMatrix<float64_t> compute_cov(CDotFeatures* lhs, CDotFeatures* rhs);
+		static SGMatrix<float64_t> compute_cov(
+		    CDotFeatures* lhs, CDotFeatures* rhs,
+		    bool copy_data_for_speed = true);
 
 	private:
 		void init();

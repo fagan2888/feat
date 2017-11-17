@@ -8,10 +8,10 @@
  * Copyright (C) 1999-2009 Fraunhofer Institute FIRST and Max-Planck-Society
  */
 
-#include "ml/shogun/lib/Time.h"
-#include "ml/shogun/io/SGIO.h"
-#include "ml/shogun/lib/common.h"
-#include "ml/shogun/base/SGObject.h"
+#include "../../shogun/lib/Time.h"
+#include "../../shogun/io/SGIO.h"
+#include "../../shogun/lib/common.h"
+#include "../../shogun/base/SGObject.h"
 
 using namespace shogun;
 

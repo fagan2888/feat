@@ -1,13 +1,24 @@
 # grab a file, search it for include paths and recursively copy those files into this directory.
-from shutil import copyfile
+from shutil import copyfile, copytree
 import os
+import sys
 shogun_dir = '../../../shogun/src/'
 dest_dir = ''
 
+################################################################## copy rxcpp files
+print('===\ncopying rxcpp\n===')
+copytree(shogun_dir+'shogun/rxcpp','shogun/rxcpp')
+
+print('===\ngrabbing files\n===')
+
+if len(sys.argv)>1:
+    files = sys.argv[1]
+else:
+    files = 'track'
 fnames = []
 copiedFiles = {}
 
-with open('track2','r') as out:
+with open(files,'r') as out:
     for line in out:
         print('tracing',line)
         fnames.append(line.strip())
@@ -51,3 +62,32 @@ def grab_dependencies(f):
 # run it
 for f in fnames:
     grab_dependencies(f)
+
+############################################### replace brackets with quotations and relative paths
+print("===\nreplacing brackets with relative paths\n===")
+import glob
+
+def replace_brackets(f):
+    with open(f,'r') as out:
+        lines = out.readlines()
+    ellipses = ''.join(['../' for n in f.split('/')[:-1]]) 
+    for i in range(len(lines)):
+        if '#include <shogun' in lines[i] or '#include<shogun' in lines[i]:
+            
+            print('\tfixing',lines[i])            
+            lines[i] = lines[i].replace('<','\"'+ellipses)
+            lines[i] = lines[i].replace('>','\"')
+            print('\tlines[i] now:',lines[i])
+
+    with open(f,'w') as out:
+        out.writelines(lines)
+
+# recurse through directories
+for filename in glob.iglob('shogun/' + '**/*.h', recursive = True):
+    print('processing',filename)
+    replace_brackets(filename)
+for filename in glob.iglob('shogun/' + '**/*.cpp', recursive = True):
+    print('processing',filename)
+    replace_brackets(filename)
+
+

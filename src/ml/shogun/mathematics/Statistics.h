@@ -14,10 +14,10 @@
 #ifndef __STATISTICS_H_
 #define __STATISTICS_H_
 
-#include "ml/shogun/lib/config.h"
-#include "ml/shogun/base/SGObject.h"
-#include "ml/shogun/lib/SGVector.h"
-#include "ml/shogun/io/SGIO.h"
+#include "../../shogun/lib/config.h"
+#include "../../shogun/base/SGObject.h"
+#include "../../shogun/lib/SGVector.h"
+#include "../../shogun/io/SGIO.h"
 
 namespace shogun
 {

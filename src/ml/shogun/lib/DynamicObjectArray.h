@@ -12,11 +12,11 @@
 #ifndef _DYNAMIC_OBJECT_ARRAY_H_
 #define _DYNAMIC_OBJECT_ARRAY_H_
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/base/SGObject.h"
-#include "ml/shogun/base/DynArray.h"
-#include "ml/shogun/base/Parameter.h"
+#include "../../shogun/base/SGObject.h"
+#include "../../shogun/base/DynArray.h"
+#include "../../shogun/base/Parameter.h"
 
 namespace shogun
 {

@@ -1,8 +1,8 @@
-#include "ml/shogun/lib/common.h"
-#include "ml/shogun/lib/SGString.h"
-#include "ml/shogun/lib/SGVector.h"
-#include "ml/shogun/io/File.h"
-#include "ml/shogun/io/SGIO.h"
+#include "../../shogun/lib/common.h"
+#include "../../shogun/lib/SGString.h"
+#include "../../shogun/lib/SGVector.h"
+#include "../../shogun/io/File.h"
+#include "../../shogun/io/SGIO.h"
 
 namespace shogun
 {

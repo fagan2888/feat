@@ -14,9 +14,9 @@
 #ifndef __DATATYPE_H__
 #define __DATATYPE_H__
 
-#include "ml/shogun/lib/config.h"
+#include "../../shogun/lib/config.h"
 
-#include "ml/shogun/lib/common.h"
+#include "../../shogun/lib/common.h"
 
 #define PT_NOT_GENERIC	PT_SGOBJECT
 
