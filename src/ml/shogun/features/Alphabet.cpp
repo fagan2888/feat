@@ -9,12 +9,12 @@
  */
 
 #include <string.h>
-#include <shogun/mathematics/Math.h>
+#include "ml/shogun/mathematics/Math.h"
 #include <ctype.h>
 
-#include <shogun/features/Alphabet.h>
-#include <shogun/io/SGIO.h>
-#include <shogun/base/Parameter.h>
+#include "ml/shogun/features/Alphabet.h"
+#include "ml/shogun/io/SGIO.h"
+#include "ml/shogun/base/Parameter.h"
 
 using namespace shogun;
 

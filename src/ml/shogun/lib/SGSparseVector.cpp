@@ -11,10 +11,10 @@
  * Copyright (C) 2012 Soeren Sonnenburg
  */
 
-#include <shogun/lib/SGSparseVector.h>
-#include <shogun/lib/SGVector.h>
-#include <shogun/mathematics/Math.h>
-#include <shogun/io/File.h>
+#include "ml/shogun/lib/SGSparseVector.h"
+#include "ml/shogun/lib/SGVector.h"
+#include "ml/shogun/mathematics/Math.h"
+#include "ml/shogun/io/File.h"
 
 namespace shogun
 {

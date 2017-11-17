@@ -12,21 +12,21 @@
 #include <string.h>
 #include <cctype>
 
-#include <shogun/base/Parameter.h>
-#include <shogun/base/class_list.h>
-#include <shogun/lib/Hash.h>
-#include <shogun/lib/memory.h>
-#include <shogun/io/SGIO.h>
-#include <shogun/mathematics/Math.h>
-#include <shogun/lib/common.h>
-#include <shogun/lib/DataType.h>
+#include "ml/shogun/base/Parameter.h"
+#include "ml/shogun/base/class_list.h"
+#include "ml/shogun/lib/Hash.h"
+#include "ml/shogun/lib/memory.h"
+#include "ml/shogun/io/SGIO.h"
+#include "ml/shogun/mathematics/Math.h"
+#include "ml/shogun/lib/common.h"
+#include "ml/shogun/lib/DataType.h"
 
-#include <shogun/lib/SGString.h>
-#include <shogun/lib/SGVector.h>
-#include <shogun/lib/SGSparseVector.h>
-#include <shogun/lib/SGMatrix.h>
-#include <shogun/lib/SGSparseMatrix.h>
-#include <shogun/io/SerializableFile.h>
+#include "ml/shogun/lib/SGString.h"
+#include "ml/shogun/lib/SGVector.h"
+#include "ml/shogun/lib/SGSparseVector.h"
+#include "ml/shogun/lib/SGMatrix.h"
+#include "ml/shogun/lib/SGSparseMatrix.h"
+#include "ml/shogun/io/SerializableFile.h"
 
 using namespace shogun;
 
@@ -2195,7 +2195,7 @@ TParameter::new_sgserial(CSGObject** param,
 	if (*param != NULL)
 		SG_UNREF(*param);
 
-	*param = create(sgserializable_name, generic);
+	*param = new_sgserializable(sgserializable_name, generic);
 
 	if (*param == NULL) {
 		string_t buf = {'\0'};

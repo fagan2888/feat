@@ -28,9 +28,10 @@
  * either expressed or implied, of the Shogun Development Team.
  */
 
-#include <shogun/mathematics/Math.h>
-#include <shogun/multiclass/tree/CARTree.h>
-#include <shogun/mathematics/eigen3.h>
+#include "ml/shogun/mathematics/Math.h"
+#include "ml/shogun/multiclass/tree/CARTree.h"
+#include "ml/shogun/mathematics/linalg/linalg.h"
+#include "ml/shogun/mathematics/eigen3.h"
 
 using namespace Eigen;
 using namespace shogun;

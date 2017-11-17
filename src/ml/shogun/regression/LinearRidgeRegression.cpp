@@ -6,14 +6,14 @@
  *
  * Copyright (C) 2012 Soeren Sonnenburg
  */
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
 #ifdef HAVE_LAPACK
-#include <shogun/regression/LinearRidgeRegression.h>
-#include <shogun/mathematics/eigen3.h>
-#include <shogun/mathematics/lapack.h>
-#include <shogun/mathematics/Math.h>
-#include <shogun/labels/RegressionLabels.h>
+#include "ml/shogun/regression/LinearRidgeRegression.h"
+#include "ml/shogun/mathematics/lapack.h"
+#include "ml/shogun/mathematics/Math.h"
+#include "ml/shogun/labels/RegressionLabels.h"
+#include "ml/shogun/mathematics/eigen3.h"
 
 using namespace shogun;
 using namespace Eigen;

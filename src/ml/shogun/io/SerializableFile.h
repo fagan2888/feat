@@ -12,10 +12,10 @@
 #ifndef __SERIALIZABLE_FILE_H__
 #define __SERIALIZABLE_FILE_H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
-#include <shogun/base/SGObject.h>
-#include <shogun/lib/DataType.h>
+#include "ml/shogun/base/SGObject.h"
+#include "ml/shogun/lib/DataType.h"
 
 namespace shogun
 {

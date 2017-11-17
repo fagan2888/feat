@@ -1,9 +1,9 @@
-#include <shogun/lib/SGMatrix.h>
-#include <shogun/lib/SGSparseMatrix.h>
-#include <shogun/lib/SGSparseVector.h>
-#include <shogun/io/File.h>
-#include <shogun/io/SGIO.h>
-#include <shogun/io/LibSVMFile.h>
+#include "ml/shogun/lib/SGMatrix.h"
+#include "ml/shogun/lib/SGSparseMatrix.h"
+#include "ml/shogun/lib/SGSparseVector.h"
+#include "ml/shogun/io/File.h"
+#include "ml/shogun/io/SGIO.h"
+#include "ml/shogun/io/LibSVMFile.h"
 
 namespace shogun {
 

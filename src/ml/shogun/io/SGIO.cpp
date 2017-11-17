@@ -9,14 +9,14 @@
  * Copyright (C) 1999-2009 Fraunhofer Institute FIRST and Max-Planck-Society
  */
 
-#include <shogun/io/SGIO.h>
-#include <shogun/lib/ShogunException.h>
-#include <shogun/lib/common.h>
-#include <shogun/base/init.h>
-#include <shogun/lib/memory.h>
-#include <shogun/lib/Time.h>
-#include <shogun/mathematics/Math.h>
-#include <shogun/lib/RefCount.h>
+#include "ml/shogun/io/SGIO.h"
+#include "ml/shogun/lib/ShogunException.h"
+#include "ml/shogun/lib/common.h"
+#include "ml/shogun/base/init.h"
+#include "ml/shogun/lib/memory.h"
+#include "ml/shogun/lib/Time.h"
+#include "ml/shogun/mathematics/Math.h"
+#include "ml/shogun/lib/RefCount.h"
 
 #include <stdarg.h>
 #include <ctype.h>

@@ -1,8 +1,8 @@
 #ifndef _REFCOUNT__H__
 #define _REFCOUNT__H__
 
-#include <shogun/lib/config.h>
-#include <shogun/lib/common.h>
+#include "ml/shogun/lib/config.h"
+#include "ml/shogun/lib/common.h"
 #include <atomic>
 
 namespace shogun

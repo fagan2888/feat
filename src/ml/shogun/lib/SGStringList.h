@@ -12,11 +12,11 @@
 #ifndef __SGSTRINGLIST_H__
 #define __SGSTRINGLIST_H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
-#include <shogun/lib/common.h>
-#include <shogun/lib/SGReferencedData.h>
-#include <shogun/lib/SGString.h>
+#include "ml/shogun/lib/common.h"
+#include "ml/shogun/lib/SGReferencedData.h"
+#include "ml/shogun/lib/SGString.h"
 
 namespace shogun
 {

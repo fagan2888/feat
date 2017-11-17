@@ -8,12 +8,12 @@
  * Copyright (C) 1999-2009 Fraunhofer Institute FIRST and Max Planck Society
  */
 
-#include <shogun/lib/common.h>
+#include "ml/shogun/lib/common.h"
 
 #ifndef VERSION_H__
 #define VERSION_H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
 namespace shogun
 {

@@ -1,12 +1,12 @@
-#include <shogun/base/Parameter.h>
-#include <shogun/base/progress.h>
-#include <shogun/features/StringFeatures.h>
-#include <shogun/io/MemoryMappedFile.h>
-#include <shogun/io/SGIO.h>
-#include <shogun/lib/SGStringList.h>
-#include <shogun/mathematics/Math.h>
-#include <shogun/preprocessor/Preprocessor.h>
-#include <shogun/preprocessor/StringPreprocessor.h>
+#include "ml/shogun/base/Parameter.h"
+#include "ml/shogun/base/progress.h"
+#include "ml/shogun/features/StringFeatures.h"
+#include "ml/shogun/io/MemoryMappedFile.h"
+#include "ml/shogun/io/SGIO.h"
+#include "ml/shogun/lib/SGStringList.h"
+#include "ml/shogun/mathematics/Math.h"
+#include "ml/shogun/preprocessor/Preprocessor.h"
+#include "ml/shogun/preprocessor/StringPreprocessor.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>

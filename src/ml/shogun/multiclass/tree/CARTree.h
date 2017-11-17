@@ -32,11 +32,11 @@
 #ifndef _CARTREE_H__
 #define _CARTREE_H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
-#include <shogun/multiclass/tree/TreeMachine.h>
-#include <shogun/multiclass/tree/CARTreeNodeData.h>
-#include <shogun/features/DenseFeatures.h>
+#include "ml/shogun/multiclass/tree/TreeMachine.h"
+#include "ml/shogun/multiclass/tree/CARTreeNodeData.h"
+#include "ml/shogun/features/DenseFeatures.h"
 
 namespace shogun
 {

@@ -7,11 +7,11 @@
  * Written (W) 2013 Soumyajit De
  */
 
-#include <shogun/lib/common.h>
+#include "ml/shogun/lib/common.h"
 
-#include <shogun/lib/SGSparseMatrix.h>
-#include <shogun/lib/SGSparseVector.h>
-#include <shogun/mathematics/eigen3.h>
+#include "ml/shogun/lib/SGSparseMatrix.h"
+#include "ml/shogun/lib/SGSparseVector.h"
+#include "ml/shogun/mathematics/eigen3.h"
 
 using namespace Eigen;
 

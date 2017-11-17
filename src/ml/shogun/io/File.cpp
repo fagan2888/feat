@@ -12,13 +12,13 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <shogun/io/File.h>
-#include <shogun/io/SGIO.h>
-#include <shogun/base/SGObject.h>
+#include "ml/shogun/io/File.h"
+#include "ml/shogun/io/SGIO.h"
+#include "ml/shogun/base/SGObject.h"
 
-#include <shogun/lib/memory.h>
-#include <shogun/lib/SGSparseVector.h>
-#include <shogun/lib/SGString.h>
+#include "ml/shogun/lib/memory.h"
+#include "ml/shogun/lib/SGSparseVector.h"
+#include "ml/shogun/lib/SGString.h"
 
 using namespace shogun;
 

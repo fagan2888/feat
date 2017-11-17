@@ -35,7 +35,7 @@
 #ifndef _TAG_H_
 #define _TAG_H_
 
-#include <shogun/lib/basetag.h>
+#include "ml/shogun/lib/basetag.h"
 
 namespace shogun
 {

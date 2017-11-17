@@ -1,5 +1,5 @@
-#include <shogun/lib/SGReferencedData.h>
-#include <shogun/lib/RefCount.h>
+#include "ml/shogun/lib/SGReferencedData.h"
+#include "ml/shogun/lib/RefCount.h"
 
 using namespace shogun;
 

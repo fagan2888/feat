@@ -29,8 +29,8 @@
  * either expressed or implied, of the Shogun Development Team.
  */
 
-#include <shogun/labels/MultilabelLabels.h>
-#include <shogun/io/SGIO.h>                    // for REQUIRE, SG_PRINT, etc
+#include "ml/shogun/labels/MultilabelLabels.h"
+#include "ml/shogun/io/SGIO.h"                    // for REQUIRE, SG_PRINT, etc
 
 using namespace shogun;
 

@@ -8,12 +8,12 @@
  * Copyright (C) 2008-2009 Fraunhofer Institute FIRST and Max-Planck-Society
  */
 
-#include <shogun/lib/config.h>
-#include <shogun/lib/ShogunException.h>
-#include <shogun/lib/common.h>
-#include <shogun/lib/SGVector.h>
-#include <shogun/lib/SGSparseVector.h>
-#include <shogun/lib/SGMatrix.h>
+#include "ml/shogun/lib/config.h"
+#include "ml/shogun/lib/ShogunException.h"
+#include "ml/shogun/lib/common.h"
+#include "ml/shogun/lib/SGVector.h"
+#include "ml/shogun/lib/SGSparseVector.h"
+#include "ml/shogun/lib/SGMatrix.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -28,7 +28,7 @@
 using namespace shogun;
 
 #ifdef TRACE_MEMORY_ALLOCS
-#include <shogun/lib/Map.h>
+#include "ml/shogun/lib/Map.h"
 extern CMap<void*, shogun::MemoryBlock>* sg_mallocs;
 
 MemoryBlock::MemoryBlock() : ptr(NULL), size(0), file(NULL),

@@ -11,11 +11,11 @@
 
 #include <string.h>
 
-#include <shogun/base/SGObject.h>
-#include <shogun/lib/DataType.h>
-#include <shogun/lib/SGString.h>
-#include <shogun/lib/SGSparseVector.h>
-#include <shogun/io/SGIO.h>
+#include "ml/shogun/base/SGObject.h"
+#include "ml/shogun/lib/DataType.h"
+#include "ml/shogun/lib/SGString.h"
+#include "ml/shogun/lib/SGSparseVector.h"
+#include "ml/shogun/io/SGIO.h"
 
 using namespace shogun;
 

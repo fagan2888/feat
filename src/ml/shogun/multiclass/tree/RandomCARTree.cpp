@@ -28,8 +28,8 @@
  * either expressed or implied, of the Shogun Development Team.
  */
 
-#include <shogun/multiclass/tree/RandomCARTree.h>
-#include <shogun/mathematics/Math.h>
+#include "ml/shogun/multiclass/tree/RandomCARTree.h"
+#include "ml/shogun/mathematics/Math.h"
 
 using namespace shogun;
 

@@ -34,15 +34,15 @@
 #define LINALG_BACKEND_BASE_H__
 
 #include <memory>
-#include <shogun/io/SGIO.h>
-#include <shogun/lib/SGMatrix.h>
-#include <shogun/lib/SGVector.h>
-#include <shogun/lib/common.h>
-#include <shogun/lib/config.h>
-#include <shogun/mathematics/Math.h>
-#include <shogun/mathematics/linalg/GPUMemoryBase.h>
-#include <shogun/mathematics/linalg/LinalgEnums.h>
-#include <shogun/mathematics/linalg/internal/Block.h>
+#include "ml/shogun/io/SGIO.h"
+#include "ml/shogun/lib/SGMatrix.h"
+#include "ml/shogun/lib/SGVector.h"
+#include "ml/shogun/lib/common.h"
+#include "ml/shogun/lib/config.h"
+#include "ml/shogun/mathematics/Math.h"
+#include "ml/shogun/mathematics/linalg/GPUMemoryBase.h"
+#include "ml/shogun/mathematics/linalg/LinalgEnums.h"
+#include "ml/shogun/mathematics/linalg/internal/Block.h"
 
 namespace shogun
 {
@@ -250,7 +250,7 @@ namespace shogun
 #define BACKEND_GENERIC_EIGEN_SOLVER_SYMMETRIC(Type, Container)                \
 	virtual void eigen_solver_symmetric(                                       \
 	    const Container<Type>& A, SGVector<Type>& eigenvalues,                 \
-	    SGMatrix<Type>& eigenvectors, index_t k) const                         \
+	    SGMatrix<Type>& eigenvectors) const                                    \
 	{                                                                          \
 		SG_SNOTIMPLEMENTED;                                                    \
 	}
@@ -289,27 +289,12 @@ namespace shogun
 #undef BACKEND_GENERIC_IN_PLACE_BLOCK_ELEMENT_PROD
 
 /**
- * Wrapper method of in-place exponent method.
- *
- * @see linalg::exponent
- */
-#define BACKEND_GENERIC_EXPONENT(Type, Container)                              \
-	virtual void exponent(const Container<Type>& a, Container<Type>& result)   \
-	    const                                                                  \
-	{                                                                          \
-		SG_SNOTIMPLEMENTED;                                                    \
-	}
-		DEFINE_FOR_ALL_PTYPE(BACKEND_GENERIC_EXPONENT, SGVector)
-		DEFINE_FOR_ALL_PTYPE(BACKEND_GENERIC_EXPONENT, SGMatrix)
-#undef BACKEND_GENERIC_EXPONENT
-
-/**
  * Wrapper method of set matrix to identity.
  *
  * @see linalg::identity
  */
 #define BACKEND_GENERIC_IDENTITY(Type, Container)                              \
-	virtual void identity(Container<Type>& identity_matrix) const              \
+	virtual void identity(Container<Type>& I) const                            \
 	{                                                                          \
 		SG_SNOTIMPLEMENTED;                                                    \
 		return;                                                                \

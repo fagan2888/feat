@@ -8,7 +8,7 @@
  * Copyright (C) 2012 Viktor Gal
  */
 
-#include <shogun/labels/LatentLabels.h>
+#include "ml/shogun/labels/LatentLabels.h"
 
 using namespace shogun;
 

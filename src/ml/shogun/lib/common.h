@@ -29,7 +29,7 @@
 #pragma warning( disable : 4290 )
 #endif
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
 /**@name Standard Types
  * Definition of Platform independent Types
@@ -91,5 +91,5 @@ typedef SSIZE_T ssize_t;
 #define SG_FORCED_INLINE inline __attribute__((always_inline))
 #endif
 
-#include <shogun/lib/memory.h>
+#include "ml/shogun/lib/memory.h"
 #endif //__COMMON_H__

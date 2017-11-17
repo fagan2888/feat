@@ -8,10 +8,10 @@
  * Copyright (C) 1999-2009 Fraunhofer Institute FIRST and Max-Planck-Society
  */
 
-#include <shogun/base/Parallel.h>
-#include <shogun/lib/RefCount.h>
-#include <shogun/lib/config.h>
-#include <shogun/lib/memory.h>
+#include "ml/shogun/base/Parallel.h"
+#include "ml/shogun/lib/RefCount.h"
+#include "ml/shogun/lib/config.h"
+#include "ml/shogun/lib/memory.h"
 
 #ifdef HAVE_CXX11
 #include <thread>

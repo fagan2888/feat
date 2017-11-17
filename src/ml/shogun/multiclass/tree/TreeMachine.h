@@ -32,11 +32,11 @@
 #ifndef TREEMACHINE_H__
 #define TREEMACHINE_H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
-#include <shogun/machine/BaseMulticlassMachine.h>
-#include <shogun/multiclass/tree/TreeMachineNode.h>
-#include <shogun/multiclass/tree/BinaryTreeMachineNode.h>
+#include "ml/shogun/machine/BaseMulticlassMachine.h"
+#include "ml/shogun/multiclass/tree/TreeMachineNode.h"
+#include "ml/shogun/multiclass/tree/BinaryTreeMachineNode.h"
 
 namespace shogun
 {

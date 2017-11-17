@@ -8,10 +8,10 @@
  * Copyright (C) 2013 Evangelos Anagnostopoulos
  */
 
-#include <shogun/lib/DelimiterTokenizer.h>
-#include <shogun/base/SGObject.h>
-#include <shogun/base/Parameter.h>
-#include <shogun/lib/SGVector.h>
+#include "ml/shogun/lib/DelimiterTokenizer.h"
+#include "ml/shogun/base/SGObject.h"
+#include "ml/shogun/base/Parameter.h"
+#include "ml/shogun/lib/SGVector.h"
 
 #include <string.h>
 

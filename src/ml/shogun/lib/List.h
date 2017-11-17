@@ -13,11 +13,11 @@
 #ifndef _LIST_H_
 #define _LIST_H_
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
-#include <shogun/lib/common.h>
-#include <shogun/base/SGObject.h>
-#include <shogun/base/Parameter.h>
+#include "ml/shogun/lib/common.h"
+#include "ml/shogun/base/SGObject.h"
+#include "ml/shogun/base/Parameter.h"
 
 namespace shogun
 {

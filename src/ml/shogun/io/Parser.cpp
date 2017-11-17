@@ -8,8 +8,8 @@
  */
 
 #include <stdlib.h>
-#include <shogun/io/Parser.h>
-#include <shogun/lib/Tokenizer.h>
+#include "ml/shogun/io/Parser.h"
+#include "ml/shogun/lib/Tokenizer.h"
 
 using namespace shogun;
 

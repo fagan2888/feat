@@ -1,16 +1,16 @@
 /*
  * Copyright (c) The Shogun Machine Learning Toolbox
- * Written (w) 2014 Parijat Mazumdar
+ * Written (w) 2015 Soumyajit De
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
  * 1. Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.
+ *    list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
- * this list of conditions and the following disclaimer in the documentation
- * and/or other materials provided with the distribution.
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -28,57 +28,51 @@
  * either expressed or implied, of the Shogun Development Team.
  */
 
+#ifndef OPENCL_OPERATION_H_
+#define OPENCL_OPERATION_H_
 
-#ifndef C45TREENODEDATA_H__
-#define C45TREENODEDATA_H__
-
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
+#include <string>
 
 namespace shogun
 {
-/** @brief structure to store data of a node of
- * C4.5 tree. This can be used as a template type in
- * TreeMachineNode class. Ex: C4.5 algorithm uses nodes
- * of type CTreeMachineNode<C45TreeNodeData>
- */
-struct C45TreeNodeData
+
+namespace linalg
 {
-	/** classifying attribute */
-	int32_t attribute_id;
 
-	/** feature value required to move into this node */
-	float64_t transit_if_feature_value;
-
-	/** class label of data (-1 for internal nodes) */
-	float64_t class_label;
-
-	/** weight of all samples present in the node during training **/
-	float64_t total_weight;
-
-	/** weight of all samples present in the node during training not belonging to class_label class **/
-	float64_t weight_minus;
-
-	/** constructor */
-	C45TreeNodeData()
-	{
-		attribute_id=-1;
-		transit_if_feature_value=-1.0;
-		class_label=-1.0;
-		total_weight=0.0;
-		weight_minus=0.0;
-	}
-
-	/** print data
-	 * @param data the data to be printed
+namespace operations
+{
+/**
+ * @brief class ocl_operation for element-wise unary OpenCL operations for
+ * GPU-types (CGPUMatrix/CGPUVector).
+ */
+class ocl_operation
+{
+public:
+	/**
+	 * Constructor
+	 * @param operation The unary operation string. The current element
+	 * has to be refered as "element".
 	 */
-	static void print_data(const C45TreeNodeData &data)
+	ocl_operation(std::string operation) : m_operation(operation)
 	{
-		SG_SPRINT("classifying feature index=%d\n", data.attribute_id);
-		SG_SPRINT("transit feature value=%f\n", data.transit_if_feature_value);
 	}
+
+	/**
+	 * @return The OpenCL operation to be used in a OpenCL kernel
+	 */
+	std::string get_operation() const
+	{
+		return m_operation;
+	}
+
+private:
+	std::string m_operation;
 };
 
+}
 
-} /* shogun */
+}
 
-#endif /* C45TREENODEDATA_H__ */
+}
+#endif // OPENCL_OPERATION_H_

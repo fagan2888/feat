@@ -11,7 +11,7 @@
 #ifndef _STRUCTURED_DATA_TYPES__H__
 #define _STRUCTURED_DATA_TYPES__H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
 namespace shogun
 {

@@ -11,11 +11,11 @@
 #ifndef _LINEARCLASSIFIER_H__
 #define _LINEARCLASSIFIER_H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
-#include <shogun/lib/common.h>
-#include <shogun/machine/Machine.h>
-#include <shogun/lib/SGVector.h>
+#include "ml/shogun/lib/common.h"
+#include "ml/shogun/machine/Machine.h"
+#include "ml/shogun/lib/SGVector.h"
 
 
 namespace shogun

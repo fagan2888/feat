@@ -13,17 +13,18 @@
  * Copyright (C) 2012 Soeren Sonnenburg
  */
 
-#include <shogun/lib/config.h>
-#include <shogun/lib/SGVector.h>
-#include <shogun/lib/SGMatrix.h>
-#include <shogun/lib/SGSparseVector.h>
-#include <shogun/lib/SGReferencedData.h>
-#include <shogun/io/File.h>
+#include "ml/shogun/lib/config.h"
+#include "ml/shogun/lib/SGVector.h"
+#include "ml/shogun/lib/SGMatrix.h"
+#include "ml/shogun/lib/SGSparseVector.h"
+#include "ml/shogun/lib/SGReferencedData.h"
+#include "ml/shogun/io/File.h"
 
-#include <shogun/mathematics/Math.h>
-#include <shogun/mathematics/linalg/LinalgNamespace.h>
-#include <shogun/mathematics/lapack.h>
+#include "ml/shogun/mathematics/Math.h"
+#include "ml/shogun/mathematics/lapack.h"
 #include <algorithm>
+
+#include "ml/shogun/mathematics/eigen3.h"
 
 #define COMPLEX128_ERROR_NOARG(function) \
 template <> \
@@ -731,12 +732,13 @@ float32_t SGVector<float32_t>::twonorm(const float32_t* x, int32_t len)
 template <>
 float64_t SGVector<float64_t>::twonorm(const float64_t* v, int32_t n)
 {
+	float64_t norm = 0.0;
 #ifdef HAVE_LAPACK
-	return cblas_dnrm2(n, v, 1);
+	norm = cblas_dnrm2(n, v, 1);
 #else
-	SGVector<float64_t> wrapper(const_cast<float64_t*>(v), n, false);
-	return CMath::sqrt(linalg::dot(wrapper, wrapper));
+	norm = CMath::sqrt(CMath::dot(v, v, n));
 #endif
+	return norm;
 }
 
 template <>

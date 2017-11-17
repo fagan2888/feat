@@ -31,11 +31,11 @@
 #ifndef BINARYTREEMACHINENODE_H__
 #define BINARYTREEMACHINENODE_H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
-#include <shogun/base/SGObject.h>
-#include <shogun/base/Parameter.h>
-#include <shogun/multiclass/tree/TreeMachineNode.h>
+#include "ml/shogun/base/SGObject.h"
+#include "ml/shogun/base/Parameter.h"
+#include "ml/shogun/multiclass/tree/TreeMachineNode.h"
 
 namespace shogun
 {

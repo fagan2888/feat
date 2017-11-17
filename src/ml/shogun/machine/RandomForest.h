@@ -31,8 +31,8 @@
 #ifndef _RANDOMFOREST_H__
 #define _RANDOMFOREST_H__
 
-#include <shogun/lib/config.h>
-#include <shogun/machine/BaggingMachine.h>
+#include "ml/shogun/lib/config.h"
+#include "ml/shogun/machine/BaggingMachine.h"
 
 namespace shogun
 {

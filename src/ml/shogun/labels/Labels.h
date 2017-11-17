@@ -13,14 +13,14 @@
 #ifndef _LABELS__H__
 #define _LABELS__H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
-#include <shogun/lib/common.h>
-#include <shogun/base/SGObject.h>
-#include <shogun/labels/LabelsFactory.h>
-#include <shogun/labels/LabelTypes.h>
-#include <shogun/features/SubsetStack.h>
-#include <shogun/lib/SGVector.h>
+#include "ml/shogun/lib/common.h"
+#include "ml/shogun/base/SGObject.h"
+#include "ml/shogun/labels/LabelsFactory.h"
+#include "ml/shogun/labels/LabelTypes.h"
+#include "ml/shogun/features/SubsetStack.h"
+#include "ml/shogun/lib/SGVector.h"
 
 namespace shogun
 {

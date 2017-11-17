@@ -12,12 +12,12 @@
 #include <stdlib.h>
 #endif
 
-#include <shogun/mathematics/Random.h>
-#include <shogun/base/Parameter.h>
-#include <shogun/lib/external/SFMT/SFMT.h>
-#include <shogun/lib/external/dSFMT/dSFMT.h>
-#include <shogun/lib/Time.h>
-#include <shogun/lib/Lock.h>
+#include "ml/shogun/mathematics/Random.h"
+#include "ml/shogun/base/Parameter.h"
+#include "ml/shogun/lib/external/SFMT/SFMT.h"
+#include "ml/shogun/lib/external/dSFMT/dSFMT.h"
+#include "ml/shogun/lib/Time.h"
+#include "ml/shogun/lib/Lock.h"
 
 #ifdef DEV_RANDOM
 #include <fcntl.h>

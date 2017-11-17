@@ -11,12 +11,12 @@
 #ifndef __SUBSET_H_
 #define __SUBSET_H_
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
-#include <shogun/lib/common.h>
-#include <shogun/base/SGObject.h>
-#include <shogun/mathematics/Math.h>
-#include <shogun/lib/SGVector.h>
+#include "ml/shogun/lib/common.h"
+#include "ml/shogun/base/SGObject.h"
+#include "ml/shogun/mathematics/Math.h"
+#include "ml/shogun/lib/SGVector.h"
 
 namespace shogun
 {

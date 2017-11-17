@@ -14,12 +14,12 @@
 #ifndef __SGVECTOR_H__
 #define __SGVECTOR_H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
-#include <shogun/io/SGIO.h>
-#include <shogun/lib/common.h>
-#include <shogun/lib/SGReferencedData.h>
-#include <shogun/mathematics/linalg/GPUMemoryBase.h>
+#include "ml/shogun/io/SGIO.h"
+#include "ml/shogun/lib/common.h"
+#include "ml/shogun/lib/SGReferencedData.h"
+#include "ml/shogun/mathematics/linalg/GPUMemoryBase.h"
 
 #include <memory>
 #include <atomic>

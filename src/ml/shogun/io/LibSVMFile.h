@@ -12,8 +12,8 @@
 #ifndef __LIBSVMFILE_H__
 #define __LIBSVMFILE_H__
 
-#include <shogun/lib/config.h>
-#include <shogun/io/File.h>
+#include "ml/shogun/lib/config.h"
+#include "ml/shogun/io/File.h"
 
 namespace shogun
 {

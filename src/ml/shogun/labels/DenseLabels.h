@@ -13,12 +13,12 @@
 #ifndef _DENSE_LABELS__H__
 #define _DENSE_LABELS__H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
-#include <shogun/lib/common.h>
-#include <shogun/io/File.h>
-#include <shogun/labels/Labels.h>
-#include <shogun/features/SubsetStack.h>
+#include "ml/shogun/lib/common.h"
+#include "ml/shogun/io/File.h"
+#include "ml/shogun/labels/Labels.h"
+#include "ml/shogun/features/SubsetStack.h"
 
 namespace shogun
 {

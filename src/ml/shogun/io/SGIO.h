@@ -13,8 +13,8 @@
 #ifndef __SGIO_H__
 #define __SGIO_H__
 
-#include <shogun/lib/config.h>
-#include <shogun/lib/common.h>
+#include "ml/shogun/lib/config.h"
+#include "ml/shogun/lib/common.h"
 
 #include <dirent.h>
 #include <string.h>

@@ -7,8 +7,8 @@
  * Written (W) 2009 Soeren Sonnenburg
  * Copyright (C) 2009 Berlin Institute of Technology
  */
-#include <shogun/lib/Compressor.h>
-#include <shogun/io/SGIO.h>
+#include "ml/shogun/lib/Compressor.h"
+#include "ml/shogun/io/SGIO.h"
 #include <string.h>
 
 #ifdef USE_LZO

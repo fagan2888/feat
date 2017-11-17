@@ -9,8 +9,8 @@
 #ifndef __LOCK_H__
 #define __LOCK_H__
 
-#include <shogun/lib/config.h>
-#include <shogun/lib/cpu.h>
+#include "ml/shogun/lib/config.h"
+#include "ml/shogun/lib/cpu.h"
 #include <atomic>
 
 namespace shogun

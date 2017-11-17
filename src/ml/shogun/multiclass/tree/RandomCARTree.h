@@ -32,10 +32,10 @@
 #ifndef _RANDOMCARTREE_H__
 #define _RANDOMCARTREE_H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
-#include <shogun/multiclass/tree/TreeMachine.h>
-#include <shogun/multiclass/tree/CARTree.h>
+#include "ml/shogun/multiclass/tree/TreeMachine.h"
+#include "ml/shogun/multiclass/tree/CARTree.h"
 
 namespace shogun
 {

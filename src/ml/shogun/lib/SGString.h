@@ -13,8 +13,8 @@
 #ifndef __SGSTRING_H__
 #define __SGSTRING_H__
 
-#include <shogun/lib/config.h>
-#include <shogun/lib/common.h>
+#include "ml/shogun/lib/config.h"
+#include "ml/shogun/lib/common.h"
 
 namespace shogun
 {

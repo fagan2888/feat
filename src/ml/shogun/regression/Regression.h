@@ -11,7 +11,7 @@
 #ifndef _REGRESSION_H__
 #define _REGRESSION_H__
 
-#include <shogun/lib/config.h>
+#include "ml/shogun/lib/config.h"
 
 namespace shogun
 {

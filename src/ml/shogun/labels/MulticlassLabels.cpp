@@ -1,6 +1,6 @@
-#include <shogun/labels/DenseLabels.h>
-#include <shogun/labels/BinaryLabels.h>
-#include <shogun/labels/MulticlassLabels.h>
+#include "ml/shogun/labels/DenseLabels.h"
+#include "ml/shogun/labels/BinaryLabels.h"
+#include "ml/shogun/labels/MulticlassLabels.h"
 
 using namespace shogun;
 
@@ -50,7 +50,8 @@ void CMulticlassLabels::set_multiclass_confidences(int32_t i,
 			"%s::set_multiclass_confidences(): Length of confidences should "
 			"match size of the matrix", get_name());
 
-	m_multiclass_confidences.set_column(i, confidences);
+	for (index_t j=0; j<confidences.size(); j++)
+		m_multiclass_confidences(j,i) = confidences[j];
 }
 
 SGVector<float64_t> CMulticlassLabels::get_multiclass_confidences(int32_t i)
@@ -154,20 +155,4 @@ CLabels* CMulticlassLabels::shallow_subset_copy()
 		shallow_copy_labels->add_subset(m_subset_stack->get_last_subset()->get_subset_idx());
 
 	return shallow_copy_labels;
-}
-
-CMulticlassLabels* CMulticlassLabels::obtain_from_generic(CLabels* labels)
-{
-	if (labels == NULL)
-		return NULL;
-
-	if (labels->get_label_type() != LT_MULTICLASS)
-	{
-		SG_SERROR("The Labels passed cannot be casted to CMulticlassLabels!")
-		return NULL;
-	}
-
-	CMulticlassLabels* casted = dynamic_cast<CMulticlassLabels*>(labels);
-	SG_REF(casted)
-	return casted;
 }

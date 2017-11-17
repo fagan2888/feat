@@ -8,10 +8,10 @@
  * Copyright (C) 2012 Fernando José Iglesias García
  */
 
-#include <shogun/lib/StructuredData.h>
-#include <shogun/base/SGObject.h>
-#include <shogun/io/SGIO.h>
-#include <shogun/lib/StructuredDataTypes.h>
+#include "ml/shogun/lib/StructuredData.h"
+#include "ml/shogun/base/SGObject.h"
+#include "ml/shogun/io/SGIO.h"
+#include "ml/shogun/lib/StructuredDataTypes.h"
 
 using namespace shogun;
 
