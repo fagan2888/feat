@@ -7,7 +7,7 @@ license: GNU/GPL v3
 
 // external includes
 //#include <shogun/machine/Machine.h>
-#include <shogun/base/some.h>                                                                       
+#include "ml/shogun/base/some.h"                                                                       
 //#include <shogun/base/init.h>                                                                       
 //#include <shogun/lib/common.h>                                                                      
 //#include <shogun/labels/RegressionLabels.h>                                                         

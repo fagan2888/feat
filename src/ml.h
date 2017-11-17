@@ -10,16 +10,16 @@ license: GNU/GPL v3
 //#include <shogun/base/Parallel.h>
 //#include <shogun/machine/Machine.h>
 //#include <shogun/machine/LinearMachine.h>
-#include <shogun/regression/LeastAngleRegression.h>
-#include <shogun/regression/LinearRidgeRegression.h>
-#include <shogun/multiclass/tree/CARTree.h>
-#include <shogun/machine/RandomForest.h>
+#include "ml/shogun/regression/LeastAngleRegression.h"
+#include "ml/shogun/regression/LinearRidgeRegression.h"
+#include "ml/shogun/multiclass/tree/CARTree.h"
+#include "ml/shogun/machine/RandomForest.h"
 
 // stuff being used
 using std::string;
 using std::dynamic_pointer_cast;
 using std::cout;
-namespace sh = shogun;
+using namespace shogun;
 
 namespace FT{
 	
@@ -37,41 +37,41 @@ namespace FT{
                  * use string to specify a desired ML algorithm from shogun.
                  */
                 
-                sh::init_shogun_with_defaults();  // initialize shogun if needed
+                init_shogun_with_defaults();  // initialize shogun if needed
                 type = ml;
-                auto prob_type = sh::EProblemType::PT_REGRESSION;
+                auto prob_type = EProblemType::PT_REGRESSION;
                 
                 if (classification)
-                    prob_type = sh::EProblemType::PT_MULTICLASS;                        
+                    prob_type = EProblemType::PT_MULTICLASS;                        
                 
                 
                 if (!ml.compare("LeastAngleRegression"))
-                    p_est = make_shared<sh::CLeastAngleRegression>();
+                    p_est = make_shared<CLeastAngleRegression>();
                 
                 else if (!ml.compare("RandomForest")){
-                    p_est = make_shared<sh::CRandomForest>();
-                    dynamic_pointer_cast<sh::CRandomForest>(p_est)->
+                    p_est = make_shared<CRandomForest>();
+                    dynamic_pointer_cast<CRandomForest>(p_est)->
                                                                set_machine_problem_type(prob_type);
                 }
                 else if (!ml.compare("CART")){
-                    p_est = make_shared<sh::CCARTree>();
-                    dynamic_pointer_cast<sh::CCARTree>(p_est)->set_machine_problem_type(prob_type);
+                    p_est = make_shared<CCARTree>();
+                    dynamic_pointer_cast<CCARTree>(p_est)->set_machine_problem_type(prob_type);
                 }
 
                 else if (!ml.compare("LinearRidgeRegression"))
-                    p_est = make_shared<sh::CLinearRidgeRegression>();                   
+                    p_est = make_shared<CLinearRidgeRegression>();                   
                 
                 else
                     std::cerr << "'" + ml + "' is not a valid ml choice\n";
                 
             }
         
-            ~ML(){ sh::exit_shogun(); }
+            ~ML(){ exit_shogun(); }
 
             // return vector of weights for model. 
             vector<double> get_weights();
 
-            shared_ptr<sh::CMachine> p_est;
+            shared_ptr<CMachine> p_est;
             string type;
     };
 
@@ -85,7 +85,7 @@ namespace FT{
         
         if (!type.compare("LeastAngleRegression") || !type.compare("LinearRidgeRegression"))
         {
-            auto tmp = dynamic_pointer_cast<sh::CLinearMachine>(p_est)->get_w();
+            auto tmp = dynamic_pointer_cast<CLinearMachine>(p_est)->get_w();
             
             w.assign(tmp.data(), tmp.data()+tmp.size());          
                 
