@@ -77,7 +77,7 @@ namespace FT{
          *
          * @param   pop: current population
          * @param  	parents: indices of population to use for variation
-         * @param  	params: fewtwo parameters
+         * @param  	params: feat parameters
          *
          * @return  appends params.pop_size offspring derived from parent variation
          */
@@ -149,7 +149,8 @@ namespace FT{
 
         // make child a copy of mom
         child.program = mom.program; 
-        
+        child.p = mom.p; 
+
         float rf = r();
         if (rf < 1.0/3.0 && child.get_dim() > 1){
             delete_mutate(child,params); 
@@ -180,11 +181,11 @@ namespace FT{
          * */
         params.msg("\tpoint mutation",2);
         float n = child.size(); 
-        
+        unsigned i = 0;
         // loop thru child's program
         for (auto& p : child.program)
         {
-            if (r() < 1/n)  // mutate p. TODO: change '1' to node weighted probability
+            if (r() < child.get_p(i)/n)  // mutate p. 
             {
                 params.msg("\t\tmutating node " + p->name, 2);
                 vector<std::shared_ptr<Node>> replacements;  // potential replacements for p
@@ -213,6 +214,7 @@ namespace FT{
                 // replace p with a random one
                 p = r.random_choice(replacements);  
             }
+            ++i; 
         }
 
     }
@@ -223,15 +225,17 @@ namespace FT{
          * @param params: parameters
          * @returns modified child
          * */
-        //TODO: make adding a new dimension one of the insertion mutation options
+        
         params.msg("\tinsert mutation",2);
         float n = child.size(); 
+        
         if (r()<0.5 || child.get_dim() == params.max_dim)
         {
             // loop thru child's program
             for (unsigned i = 0; i< child.program.size(); ++i)
             {
-                if (r() < 1/n)  // mutate p. TODO: change '1' to node weighted probability
+                
+                if (r() < child.get_p(i)/n)  // mutate with weighted probability
                 {
                     params.msg("\t\tinsert mutating node " + child.program[i]->name, 2);
                     vector<std::shared_ptr<Node>> insertion;  // inserted segment
@@ -239,64 +243,53 @@ namespace FT{
                     
                     // find instructions with matching output types and a matching arity to i
                     for (const auto& f: params.functions)
-                    {                         
+                    { 
+                        // find fns with matching output types that take this node type as arg
                         if (f->arity[child.program[i]->otype] > 0 && 
                                 f->otype==child.program[i]->otype )
-                        { // assuming no boolean terminals, the function's boolean arity 
-                          // must be fully satisfied by the child 
-                          // program node
-                            if (child.program[i]->otype=='b' && f->arity['b']==1 ||
-                                    child.program[i]->otype=='f' && f->arity['b']==0)
-                                fns.push_back(f);                        
+                        { 
+                            // make sure there are satisfactory types in terminals to fill fns' 
+                            // args
+                            if (child.program[i]->otype=='b')
+                                if (in(params.dtypes,'b') || f->arity['b']==1)
+                                    fns.push_back(f);
+                            else if (child.program[i]->otype=='f')
+                                if (f->arity['b']==0 || in(params.dtypes,'b') )
+                                    fns.push_back(f);              
                         }
                     }
-                    // if fns all have positive boolean arities, assuming inputs are continuous,
-                    // just continue
-                    //int bfs=0;
-                    //for (const auto& f: fns)
-                    //    if (f->arity['b']>0) ++bfs;
-                    //if (bfs == fns.size()) 
-                    //    continue;
+
                     if (fns.size()==0)  // if no insertion functions match, skip
                         continue;
-                    // if doing insert mutation with a boolean node, hand construct insertion since
-                    // there are no boolean terminals 
-                    if (child.program[i]->otype=='b')
-                    {
-                        insertion.push_back(r.random_choice(fns));
-                        unsigned fa = insertion.back()->arity['f'];
-                        for (unsigned j = 0; j< fa; ++j)
-                            insertion.push_back(r.random_choice(params.terminals));
-                        insertion.push_back(child.program[i]);
-                        std::reverse(insertion.begin(),insertion.end());
-                    }
-                    else
-                    {
-                        insertion.push_back(r.random_choice(fns));
-                        unsigned fa = insertion.back()->arity['f']-1;
-                        for (unsigned j = 0; j< fa; ++j)
-                            insertion.push_back(r.random_choice(params.terminals));
-                        insertion.push_back(child.program[i]);
-                        std::reverse(insertion.begin(),insertion.end());
-                       // make_program(insertion, fns, params.terminals, 1,  
-                       //              params.term_weights,1, child.program[i]->otype);
-                       // 
-                       // for (auto& ins : insertion){    // replace first argument in insertion
-                       //     if (ins->otype == child.program[i]->otype 
-                       //             && ins->arity['f']==child.program[i]->arity['f'] 
-                       //             && ins->arity['b']==child.program[i]->arity['b'])
-                       //     {
-                       //         ins = child.program[i];
-                       //         continue;
-                       //     }
 
-                       // }
-                    }
+                    // choose a function to insert                    
+                    insertion.push_back(r.random_choice(fns));
+                    
+                    unsigned fa = insertion.back()->arity['f']; // float arity
+                    unsigned ba = insertion.back()->arity['b']; // bool arity
+                    // decrement function arity by one for child node 
+                    if (child.program[i]->otype=='f') --fa;
+                    else --ba; 
+                    // push back new arguments for the rest of the function
+                    for (unsigned j = 0; j< fa; ++j)
+                        make_tree(insertion,params.functions,params.terminals,0,
+                                  params.term_weights,'f');
+                    if (child.program[i]->otype=='f')    // add the child now if float
+                        insertion.push_back(child.program[i]);
+                    for (unsigned j = 0; j< ba; ++j)
+                        make_tree(insertion,params.functions,params.terminals,0,
+                                  params.term_weights,'b');
+                    if (child.program[i]->otype=='b') // add the child now if bool
+                        insertion.push_back(child.program[i]);
+                    // post-fix notation
+                    std::reverse(insertion.begin(),insertion.end());
+                    
+                    // put the new code in the program 
                     child.program.erase(child.program.begin()+i);
                     child.program.insert(child.program.begin()+i, insertion.begin(), 
                                          insertion.end());
                     i += insertion.size()-1;
-               }
+                }
                 
             }
         }
@@ -320,7 +313,8 @@ namespace FT{
         params.msg("\tdeletion mutation",2);
         params.msg("\t\tprogram: " + child.program_str(),2);
         vector<size_t> roots = child.roots();
-        size_t end = r.random_choice(roots); // TODO: weight with node weights
+        
+        size_t end = r.random_choice(roots,child.p); 
         size_t start = child.subtree(end);  
         if (params.verbosity >=2)
         { 
@@ -371,7 +365,7 @@ namespace FT{
                              + dad.program_str() + "\n";
                 return 0;               
             }
-            j1 = r.random_choice(mlocs);    
+            j1 = r.random_choice(mlocs,mom.get_p(mlocs));    
 
             // get locations in dad's program that match the subtree type picked from mom
             for (size_t i =0; i<dad.size(); ++i) 
@@ -383,7 +377,7 @@ namespace FT{
             mlocs = mom.roots();
             dlocs = dad.roots();
             params.msg("\t\trandom choice mlocs (size "+std::to_string(mlocs.size())+")",2);
-            j1 = r.random_choice(mlocs);    
+            j1 = r.random_choice(mlocs,mom.get_p(mlocs));   // weighted probability choice    
         }
         // get subtree              
         i1 = mom.subtree(j1);

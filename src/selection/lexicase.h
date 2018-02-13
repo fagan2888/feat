@@ -30,7 +30,7 @@ namespace FT{
     
     vector<size_t> Lexicase::select(Population& pop, const MatrixXd& F, const Parameters& params)
     {
-        /* Selection according to lexicase selection for classification and epsilon-lexicase
+        /*! Selection according to lexicase selection for classification and epsilon-lexicase
          * selection for regression. 
          *
          * Input: 
@@ -83,18 +83,16 @@ namespace FT{
 
               winner.resize(0);   // winners                  
               double minfit = std::numeric_limits<double>::max();   // minimum error on case
-            
+              
+              // get minimum
               for (size_t j = 0; j<pool.size(); ++j)
-              {
-                  if (F(cases[h],pool[j]) < minfit+epsilon[cases[h]])
-                  {                          
-                      minfit=F(cases[h],pool[j]);     // set the new minimum
-                      winner.resize(0);               // start the winners pool
-                      winner.push_back(pool[j]);     
-                  }
-                  else if (F(cases[h],pool[j]) == minfit+epsilon[cases[h]])
-                      winner.push_back(pool[j]);	  
-              }
+                  if (F(cases[h],pool[j]) < minfit) 
+                      minfit = F(cases[h],pool[j]);
+              
+              // select best
+              for (size_t j = 0; j<pool.size(); ++j)
+                  if (F(cases[h],pool[j]) <= minfit+epsilon[cases[h]])
+                    winner.push_back(pool[j]);                 
              
               ++h; // next case
               pass = (winner.size()>1 && h<cases.size()); // only keep going if needed
