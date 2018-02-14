@@ -14,3 +14,17 @@ shogun/classifier/svm/LibLinear.h
 shogun/ensemble/MeanRule.h
 shogun/ensemble/MajorityVote.h
 shogun/multiclass/MulticlassLibLinear.h
+shogun/lib/config.h
+shogun/multiclass/tree/TreeMachine.h
+shogun/features/DenseFeatures.h
+shogun/mathematics/Math.h
+shogun/mathematics/eigen3.h
+shogun/lib/config.h
+shogun/lib/common.h
+shogun/features/DotFeatures.h
+shogun/machine/LinearMulticlassMachine.h
+shogun/multiclass/MulticlassOneVsRestStrategy.h
+shogun/io/SGIO.h
+shogun/mathematics/Math.h
+shogun/labels/MulticlassLabels.h
+shogun/lib/slep/slep_mc_plain_lr.h

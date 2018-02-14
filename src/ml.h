@@ -6,22 +6,22 @@ license: GNU/GPL v3
 #define ML_H
 
 //external includes
-#include <shogun/base/some.h>                                                                       
-#include <shogun/base/init.h>
-#include <shogun/machine/Machine.h>
-#include <shogun/lib/common.h>                                                                      
-#include <shogun/labels/RegressionLabels.h>                                                         
-#include <shogun/labels/MulticlassLabels.h>
-#include <shogun/features/Features.h>
-#include <shogun/machine/LinearMachine.h>
-#include <shogun/regression/LeastAngleRegression.h>
-#include <shogun/regression/LinearRidgeRegression.h>
-#include <shogun/machine/RandomForest.h>
-#include <shogun/regression/svr/LibLinearRegression.h>
-#include <shogun/classifier/svm/LibLinear.h>
-#include <shogun/ensemble/MeanRule.h>
-#include <shogun/ensemble/MajorityVote.h>
-#include <shogun/multiclass/MulticlassLibLinear.h>
+#include "ml/shogun/base/some.h"                                                                       
+#include "ml/shogun/base/init.h"
+#include "ml/shogun/machine/Machine.h"
+#include "ml/shogun/lib/common.h"                                                                      
+#include "ml/shogun/labels/RegressionLabels.h"                                                         
+#include "ml/shogun/labels/MulticlassLabels.h"
+#include "ml/shogun/features/Features.h"
+#include "ml/shogun/machine/LinearMachine.h"
+#include "ml/shogun/regression/LeastAngleRegression.h"
+#include "ml/shogun/regression/LinearRidgeRegression.h"
+#include "ml/shogun/machine/RandomForest.h"
+#include "ml/shogun/regression/svr/LibLinearRegression.h"
+#include "ml/shogun/classifier/svm/LibLinear.h"
+#include "ml/shogun/ensemble/MeanRule.h"
+#include "ml/shogun/ensemble/MajorityVote.h"
+#include "ml/shogun/multiclass/MulticlassLibLinear.h"
 #include <cmath>
 // internal includes
 #include "ml/MyCARTree.h"
@@ -33,6 +33,7 @@ using std::string;
 using std::dynamic_pointer_cast;
 using std::cout;
 using namespace shogun;
+namespace sh=shogun;
 
 namespace FT{
 	

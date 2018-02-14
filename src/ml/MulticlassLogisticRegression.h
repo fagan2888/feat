@@ -9,16 +9,16 @@
 
 #ifndef MULTICLASSLOGISTICREGRESSION_H_
 #define MULTICLASSLOGISTICREGRESSION_H_
-#include <shogun/lib/config.h>
-#include <shogun/lib/common.h>
-#include <shogun/features/DotFeatures.h>
-#include <shogun/machine/LinearMulticlassMachine.h>
+#include "shogun/lib/config.h"
+#include "shogun/lib/common.h"
+#include "shogun/features/DotFeatures.h"
+#include "shogun/machine/LinearMulticlassMachine.h"
 
-#include <shogun/multiclass/MulticlassOneVsRestStrategy.h>
-#include <shogun/io/SGIO.h>
-#include <shogun/mathematics/Math.h>
-#include <shogun/labels/MulticlassLabels.h>
-#include <shogun/lib/slep/slep_mc_plain_lr.h>
+#include "shogun/multiclass/MulticlassOneVsRestStrategy.h"
+#include "shogun/io/SGIO.h"
+#include "shogun/mathematics/Math.h"
+#include "shogun/labels/MulticlassLabels.h"
+#include "shogun/lib/slep/slep_mc_plain_lr.h"
 
 namespace shogun
 {

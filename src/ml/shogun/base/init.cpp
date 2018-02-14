@@ -34,9 +34,9 @@
 shogun::CMap<void*, shogun::MemoryBlock>* sg_mallocs=NULL;
 #endif
 
-#ifdef HAVE_PROTOBUF
+/*#ifdef HAVE_PROTOBUF
 #include <google/protobuf/stubs/common.h>
-#endif
+#endif*/
 
 namespace shogun
 {
@@ -129,9 +129,9 @@ namespace shogun
 		delete CSignal::m_observable;
 		delete CSignal::m_subject;
 
-#ifdef HAVE_PROTOBUF
+/*#ifdef HAVE_PROTOBUF
 		::google::protobuf::ShutdownProtobufLibrary();
-#endif
+#endif*/
 	}
 
 	void set_global_io(SGIO* io)

@@ -41,12 +41,12 @@ endif()
 
 # gather list of source files
 
-file(GLOB src_files1 "src/*.cc")
-file(GLOB_RECURSE src_files2 "src/*.cpp")
+file(GLOB_RECURSE src_files "src/*.c*")
+#file(GLOB_RECURSE src_files2 "src/*.cpp")
 
 
 # executable
-add_executable(feat ${src_files1} ${src_files2})
+add_executable(feat ${src_files})
 
 #target_link_libraries(feat shogun)
 

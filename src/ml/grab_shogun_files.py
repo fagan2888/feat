@@ -72,13 +72,18 @@ def replace_brackets(f):
         lines = out.readlines()
     ellipses = ''.join(['../' for n in f.split('/')[:-1]]) 
     for i in range(len(lines)):
-        if '#include <shogun' in lines[i] or '#include<shogun' in lines[i]:
+        if '#include <shogun' in lines[i] or '#include<shogun' in lines[i] :
             
             print('\tfixing',lines[i])            
             lines[i] = lines[i].replace('<','\"'+ellipses)
             lines[i] = lines[i].replace('>','\"')
             print('\tlines[i] now:',lines[i])
-
+        elif "#include <rxcpp" in lines[i]:
+            print('\tfixing',lines[i])            
+            lines[i] = lines[i].replace('<','\"'+'../../')
+            lines[i] = lines[i].replace('>','\"')
+            print('\tlines[i] now:',lines[i])
+    
     with open(f,'w') as out:
         out.writelines(lines)
 

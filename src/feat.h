@@ -393,14 +393,7 @@ namespace FT{
             params.msg("survivors:\n" + p_pop->print_eqns(), 2);
 
             update_best();
-<<<<<<< HEAD:src/fewtwo.h
-            if (params.verbosity>0) print_stats(g+1);
-            std::cout << "X size: " << X.size() << "\n";
-            std::cout << "y size: " << y.size() << "\n";
-
-=======
             if (params.verbosity>0) print_stats(g+1);           
->>>>>>> master:src/feat.h
         }
         params.msg("finished",1);
         params.msg("best training representation: " + best_ind.get_eqn(),1);
@@ -592,25 +585,10 @@ namespace FT{
         std::cout << "Top " << nf <<" features (\% usage):\n";
         std::cout.precision(1);
         for (unsigned i = 0; i<nf; ++i) 
-<<<<<<< HEAD:src/fewtwo.h
-            std::cout << std::fixed << params.terminals[use_idx[i]]->name << "_" 
-                  << std::dynamic_pointer_cast<NodeVariable>(params.terminals[use_idx[i]])->loc 
-                  << " (" << use[use_idx[i]]/use_sum*100 << "\%)\t";
-        
-        for (const auto& f: params.functions)
-             use_sum+= f.use_count();
-        std::cout << "\ntotal node usage: " << use_sum << "\n";
-        std::cout << "max program size: " << Sizes.maxCoeff() <<"(" 
-                  << float(Sizes.maxCoeff())/params.max_size << ")\n";
-        std::cout << "F size: " << F.size() << "\n";
-        std::cout << "F_v size: " << F_v.size() << "\n";
-        std::cout << "\n\n";
-=======
             std::cout << std::fixed << params.terminals[use_idx[i]]->name  
                       << " (" << use[use_idx[i]]/use_sum*100 << "\%)\t"; 
         
         std::cout <<"\n\n";
->>>>>>> master:src/feat.h
     }
     
 }
