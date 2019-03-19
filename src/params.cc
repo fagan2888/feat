@@ -472,7 +472,7 @@ namespace FT{
         for (const auto& f: functions) log_msg += f->name + ", "; 
         log_msg += "]\n";
         
-        logger.log(log_msg, 2);
+        logger.log(log_msg, 3);
         
         // reset output types
         set_otypes();
