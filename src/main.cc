@@ -245,9 +245,33 @@ int main(int argc, char** argv){
     }
     
     std::map<string, std::pair<vector<ArrayXf>, vector<ArrayXf> > > Z;
+    
+//    cout << "Loading longitudinal now\n";
    
     if(ldataFile.compare("")) 
         FT::load_longitudinal(ldataFile, Z);
+        
+//    FT::DataRef d(X, y, Z, feat.get_classification());
+//    
+//    d.shuffle_data();
+//    
+//    cout << "****************************************\n";
+//    
+//    cout << "X is \n" << X << "\n"; 
+//    
+//    std::map<string, std::pair<vector<ArrayXf>, vector<ArrayXf> > >::iterator it;
+//    
+//    it = Z.begin();
+//    
+//    for(; it != Z.end(); it++)
+//    {
+//        cout << it->first << "\n";
+//        for(int i = 0; i < it->second.first.size(); i++)
+//        {
+//            cout << "value = \n" <<it->second.first[i] << "\n\ndate = \n" << it->second.second[i] << "\n\n";
+//        }
+//    }
+//    return 0;
    
     if (split < 1.0)
     {

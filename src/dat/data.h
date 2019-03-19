@@ -125,7 +125,11 @@ namespace FT
                             float split);
                             
                 /// reordering utility for shuffling longitudinal data.
-                void reorder_longitudinal(vector<ArrayXf> &vec1, const vector<int>& order); 
+                void reorder_longitudinal(vector<ArrayXf> &vec1,
+                                          vector<ArrayXf> &vec2,
+                                          vector<int> order);
+                                          
+                //void reorder_longitudinal(vector<ArrayXf> &vec1, const vector<int>& order); 
 
         };
     }

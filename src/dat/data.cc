@@ -178,10 +178,21 @@ namespace FT{
                 zw = (zw.transpose()*perm).transpose();       
                 // assign shuffled zw to zidx
                 zidx.assign(zw.data(), zw.data() + zw.size());
+                
+//                cout << "Permutation vector is " << zw << "\n";
+//                
+//                cout << "Zidx is \t";
+//                for(int x = 0 ; x < o->y.size(); x++)
+//                    cout << zidx[x] << "\t";
+//                    
+//                cout << "\n";
+//                    
                 for(auto &val : o->Z)
 				{
-                    reorder_longitudinal(val.second.first, zidx);
-                    reorder_longitudinal(val.second.second, zidx);
+//				    cout << val.first << "\n";
+				    reorder_longitudinal(val.second.first, val.second.second, zidx);
+                    //reorder_longitudinal(val.second.first, zidx);
+                    //reorder_longitudinal(val.second.second, zidx);
 				}
             }
         }
@@ -330,53 +341,66 @@ namespace FT{
             }
         }
         
-        /* void DataRef::reorder_longitudinal(vector<ArrayXf> &vec1, vector<ArrayXf> &vec2, */
-        /*                          vector<long> const &order) */
-        /* { */   
-        
-        /*     for( int s = 1, d; s < order.size(); ++ s ) */
-        /*     { */
-        /*         cout << "s: " << s << "\n"; */
-        /*         for ( d = order[s]; d < s; d = order[d] ); */
+        void DataRef::reorder_longitudinal(vector<ArrayXf> &vec1,
+                                           vector<ArrayXf> &vec2,
+                                           vector<int> order)
+        {
                 
-        /*         cout << "d: " << s << "\n"; */
-        /*         if ( d == s ) */
-        /*         { */
-        /*             while ( d = order[d], d != s ) */
-        /*             { */
-        /*                 swap(vec1[s], vec1[d]); */
-        /*                 swap(vec2[s], vec2[d]); */
-        /*             } */
-        /*         } */
-        /*     } */
-        /* } */
+//            for( int s = 1, d; s < order.size(); ++ s )
+//            {
+//                for ( d = order[s]; d < s; d = order[d] );
+
+//                if ( d == s )
+//                    while ( d = order[d], d != s )
+//                    {
+//                    swap(vec1[s], vec1[d]);
+//                    swap(vec2[s], vec2[d]);
+//                    }
+//            }
+
+            for( size_t i = 0; i < order.size(); ++i )
+            { 
+                // while order[i] is not yet in place 
+                // every swap places at least one element in it's proper place
+                while(order[i] != order[order[i]] )
+                {
+                    swap(vec1[order[i]], vec1[order[order[i]]]);
+                    swap(vec2[order[i]], vec2[order[order[i]]]);
+                    swap(order[i], order[order[i]]);
+                }
+            }
+            
+//            for(int x = 0; x < order.size(); x++)
+//                cout << order[x] << "\t";
+//            cout << "\n";
+        }
         
-        void DataRef::reorder_longitudinal(vector<ArrayXf> &vec1, const vector<int>& order)
-        {  
-			vector<int> index = order; 
-			// Fix all elements one by one 
-			for (int i=0; i<index.size(); i++) 
-			{ 
-				// While index[i] and vec1[i] are not fixed 
-				while (index.at(i) != i) 
-				{ 
-					// Store values of the target (or correct)  
-					// position before placing vec1[i] there 
-					int  oldTargetI  = index.at(index.at(i)); 
-					auto oldTargetE  = vec1.at(index.at(i)); 
-		  
-					// Place vec1[i] at its target (or correct) 
-					// position. Also copy corrected index for 
-					// new position 
-					vec1.at(index.at(i)) = vec1.at(i); 
-					index.at(index.at(i)) = index.at(i); 
-		  
-					// Copy old target values to vec1[i] and 
-					// index[i] 
-					index.at(i) = oldTargetI; 
-					vec1.at(i)   = oldTargetE; 
-				} 
-			}   
-        }    
+//        void DataRef::reorder_longitudinal(vector<ArrayXf> &vec1, const vector<int>& order)
+//        {  
+//			vector<int> index = order; 
+//			// Fix all elements one by one 
+//			for (int i=0; i<index.size(); i++) 
+//			{ 
+//				// While index[i] and vec1[i] are not fixed 
+//				while (index.at(i) != i) 
+//				{ 
+//					// Store values of the target (or correct)  
+//					// position before placing vec1[i] there 
+//					int  oldTargetI  = index.at(index.at(i)); 
+//					auto oldTargetE  = vec1.at(index.at(i)); 
+//		  
+//					// Place vec1[i] at its target (or correct) 
+//					// position. Also copy corrected index for 
+//					// new position 
+//					vec1.at(index.at(i)) = vec1.at(i); 
+//					index.at(index.at(i)) = index.at(i); 
+//		  
+//					// Copy old target values to vec1[i] and 
+//					// index[i] 
+//					index.at(i) = oldTargetI; 
+//					vec1.at(i)   = oldTargetE; 
+//				} 
+//			}   
+//        }    
     }
 }
