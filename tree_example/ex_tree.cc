@@ -2,94 +2,55 @@
 #include <string>
 #include <iostream>
 #include "tree.hh"
-#
+#include "state.h"
+#include "node.h"
+
 using namespace std;
 
-class Node
-{
-    public:
-        string name;
-        Node(string name)
-        {
-            this->name = name;
-        }
-        Node() = default;
-        ~Node() = default;
-        Node(const Node&) = default;
 
-        Node& operator=(Node && other) = default;
-
-        /* bool operator==(Node && other){return false;}; */
-        bool operator==(const Node & other){return this->name==other.name;};
-
-        void swap(Node& b)
-        {
-            using std::swap;
-            swap(this->name,b.name);
-        }
-
-        virtual int evaluate( int x=0, tree_node_<Node*>* child1=0, 
-                tree_node_<Node*>* child2=0) = 0;
-        /* { */
-        /*     cout << "evaluate!!\n"; */
-        /*     return 1; */
-        /* } */
-};
-
-class NodeVariable : public Node
-{
-    public:
-        int value;
-        NodeVariable(){name = "x"; this->value = 1;}
-        NodeVariable(int value){name = "x"; this->value = value;}
-
-        int evaluate( int x=0, tree_node_<Node*>* child1=0, 
-                tree_node_<Node*>* child2=0)
-        {
-            return  this->value;
-        }
-};
-
-class NodeAdd : public Node
+template <typename T>
+class NodeAdd : public Node<T>
 {
     public:
         NodeAdd(){name = "add";}
-        int evaluate( int x=0, tree_node_<Node*>* child1=0, 
-                tree_node_<Node*>* child2=0)
+        T evaluate(const Data& d, tree_node_<Node<T>*>* child1=0, 
+                tree_node_<Node<T>*>* child2=0)
         {
-            return  child1->eval(x) + child2->eval(x);
+            State& s = child1->eval(d);
+            s.set<int>(
+                    s.get<int>() 
+                    + child2->eval(d).get<int>()
+                    );
+            return s;
+            /* return  child1->eval(x)<> + child2->eval(x); */
         }
 };
 
-class NodeTimes : public Node
+template <typename T>
+class NodeTimes : public Node<T>
 {
     public:
         NodeTimes(){name = "times";}
-        int evaluate( int x=0, tree_node_<Node*>* child1=0, 
-                tree_node_<Node*>* child2=0)
+        State evaluate(const Data& d, tree_node_<Node<T>*>* child1=0, 
+                tree_node_<Node<T>*>* child2=0)
         {
-            return  child1->eval(x) * child2->eval(x);
+            /* return  child1->eval(x) * child2->eval(x); */
+            State& s = child1->eval(x);
+            s[int] *= child2->eval(x)[int];
+            return s;
         }
 };
 
-class NodeSum : public Node
+template <typename T>
+class NodeSum : public Node<T>
 {
     public:
         NodeSum(){name = "sum";}
-        int evaluate( int x=0, tree_node_<Node*>* child1=0, 
-                tree_node_<Node*>* child2=0)
+        State evaluate(const Data& d, tree_node_<Node<T>*>* child1=0, 
+                tree_node_<Node<T>*>* child2=0)
         {
-            int sum=0;
-            /* tree<Node*>::sibling_iterator start(child1); */
-            /* tree<Node*>::sibling_iterator end(child2); */
-            /* cout << "looping thru sum\n"; */
-            /* std::for_each(start,end, */ 
-            /*     [&sum,&x](tree<Node*>::sibling_iterator const& elem) */
-            /*     { */
-            /*         sum += elem.node->eval(x); */
-            /*     } */
-            /* ); */
-            tree_node_<Node*>* sib = child1;
+            T sum=0;
+            tree_node_<Node<T>*>* sib = child1;
             while (sib != 0)
             {
                 cout << "+= " << sib->data->name << "\n";
@@ -99,6 +60,7 @@ class NodeSum : public Node
             return  sum;
         }
 };
+
 class NodeTree: public tree<Node*>
 {
     public:
